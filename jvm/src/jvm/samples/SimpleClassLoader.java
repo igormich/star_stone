@@ -32,7 +32,8 @@ public class SimpleClassLoader {
 		clazzName+=".class";
 	    ZipFile zipFile;
 		try {
-			zipFile = new ZipFile("rt.jar");
+			File f = new File("C:/Program Files/Java/jdk1.8.0_60/jre/lib/rt.jar");
+			zipFile = new ZipFile(f.getAbsolutePath());
 		    Enumeration<? extends ZipEntry> entries = zipFile.entries();
 		    while(entries.hasMoreElements()){
 		        ZipEntry entry = entries.nextElement();

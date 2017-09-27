@@ -1,0 +1,18 @@
+MARINE=Морпех
+MARINE_DESK= 
+MARINE_ABOUT=?Посмотреть у Глена Кука
+ZERLING=Зерлинг
+ZERLING_DESK=Боевой крик, призывает второго зерлинга
+ZERLING_ABOUT=Два по цене одного
+ZEALOT=Зилот
+ZEALOT_DESK
+ZEALOT_ABOUT=?Фанатик
+MOBILIZATION=Мобилизация
+MOBILIZATION_DESK=Призывает двух морпехов
+MOBILIZATION_ABOUT=Это вам не фей-парад
+SHILD_BATTERY=Батарея щитов
+SHILD_BATTERY_DESK=В конце хода даёт существам справа и слева плазменный щит
+SHILD_BATTERY_ABOUT=?
+RECHARGE_SHIELDS=Перезарядка щитов
+RECHARGE_SHIELDS_DESK=Даёт существу плазменный щит
+RECHARGE_SHIELDS_ABOUT=?Что бы у любви не садилась батарейка?
