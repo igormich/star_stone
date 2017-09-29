@@ -71,9 +71,11 @@ public class CardRender {
 			float deltaTime = 0;
 			if (System.currentTimeMillis() - sysTime < 1000) {
 				deltaTime = (System.currentTimeMillis() - sysTime) / 1000f;
+				if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+					deltaTime*=10;
 			}
 			time+=deltaTime;
-			creatureShader.setUniform(new Vector3f(-time * 0.1f, time * 0.5f, (float) Math.sin(time)), "shift");
+			creatureShader.setUniform(new Vector3f(-time * 0.1f, time * 0.5f, time), "shift");
 			sysTime = System.currentTimeMillis();
 			if(Keyboard.isKeyDown(Keyboard.KEY_F1))
 				cardMesh.setMaterialName("cardShader");

@@ -12,6 +12,7 @@ import org.jnity.starstone.events.GameListener;
 public class Game {
 	private final List<GameListener> listeners = new ArrayList<>();
 	private final List<Player> players = new ArrayList<>();
+	private volatile int turnNumber = 0;
 	private Player activePlayer;
 	
 	public Game(Player p1,Player p2) {
@@ -54,8 +55,12 @@ public class Game {
 				activePlayer = players.get(0);
 			}
 		}
+		turnNumber++;
 		emit(GameEvent.NEW_TURN, activePlayer);
 		activePlayer.drawCard();
+	}
+	public int getTurnNumber() {
+		return turnNumber;
 	}
 	
 }

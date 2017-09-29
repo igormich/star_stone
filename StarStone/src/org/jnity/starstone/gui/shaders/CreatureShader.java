@@ -16,8 +16,11 @@ public class CreatureShader extends JFragmentShader {
 	@Uniform
 	Sampler2D movedTex;
 	@Uniform
+	Sampler2D numbers;
+	@Uniform
 	Vec3 shift;
-	
+	@Uniform
+	Vec4 values;//x-price in mineral, y-price in gas, z-power,w-hits
 	@Varying
 	Vec4 screenPos;
 	@Varying
@@ -33,7 +36,9 @@ public class CreatureShader extends JFragmentShader {
 	public void main() {
 		Vec4 f_color = texture2D(faceTex, sub(mul(texCoord.st, vec2(1.2f, 1.2f)), vec2(0.1f, 0.05f)));
 		Vec4 m_color = texture2D(movedTex, sub(texCoord.st, shift.xy));
-		f_color = mul(f_color, 1 + clamp(1/(shift.z*shift.z)-abs(shift.z)*100,0f,1f));
+		float lightning = max(sin(shift.z), sin(shift.z + 0.7f));
+		lightning = clamp(1/(lightning*lightning)-abs(lightning)*100,0f,1f);
+		f_color = mul(f_color, 1 + lightning);
 		f_color = add(f_color, mul(m_color, m_color.a*0.5f));
 		Vec4 b_color = texture2D(backTex, texCoord.st);
 		float faceMask = clamp(b_color.a * 1 - 100 * b_color.r, 0f, 1f);
