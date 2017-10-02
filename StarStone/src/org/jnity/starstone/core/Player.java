@@ -45,6 +45,8 @@ public class Player extends CreatureCard implements GameListener{
 			if(hand.size() < MAX_HAND_SIZE) {
 				hand.add(card);
 				getGame().emit(GameEvent.DRAW, card);
+			} else {
+				//getGame().emit(GameEvent.CARD_DISPELL, card);
 			}
 		} else {
 			//take damage or lose

@@ -5,7 +5,6 @@ import org.jnity.starstone.events.GameEvent;
 import base.Scene;
 
 public class Animation {
-	
 	private float time = 0;
 	
 	public static Animation createFor(StoredEvent event, Scene scene) {
