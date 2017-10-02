@@ -26,4 +26,8 @@ public class Animation {
 		time+=deltaTime;
 	}
 
+	public float getTime() {
+		return Math.min(time, 1);
+	}
+
 }

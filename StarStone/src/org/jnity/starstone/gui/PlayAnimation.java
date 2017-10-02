@@ -1,24 +1,37 @@
 package org.jnity.starstone.gui;
 
-import org.jnity.starstone.cards.Card;
+import java.util.ArrayList;
+import java.util.List;
 
-import base.Object3d;
+import org.jnity.starstone.cards.Card;
+import org.jnity.starstone.cards.CreatureCard;
+import org.lwjgl.util.vector.Vector3f;
+
 import base.Scene;
 
 public class PlayAnimation extends Animation {
 
-	private Object3d card3d;
-	private int mirrow = 1;
-
+	private List<GuiCard>  cards;
 	public PlayAnimation(Card card, Scene scene) {
-		this.card3d = GuiCard.get(card);
-		if (card.getGame().getTurnNumber()%2==0) {
+		int mirrow = 1;
+		if (card.getGame().getTurnNumber() % 2 == 0) {
 			mirrow = -1;
 		}
+		List<CreatureCard> creatures = card.getOwner().getCreatures();
+		cards = new ArrayList<>();
+		int i = 0;
+		for(CreatureCard creature: creatures) {
+			GuiCard guiCard = GuiCard.get(creature);
+			float x= -creatures.size()/2 + i;
+			System.out.println(x);
+			guiCard.startMoving(new Vector3f(2*x*mirrow,0,-3*mirrow));
+			cards.add(guiCard);
+			i++;
+		}
+		
 	}
 	@Override
-	public void play(float deltaTime, Scene scene) {
-		super.play(deltaTime, scene);
-		card3d.getPosition().move(0,0,5*deltaTime*mirrow);
+	public boolean isFinished() {
+		return cards.stream().allMatch(GuiCard::isMovingFinished);
 	}
 }

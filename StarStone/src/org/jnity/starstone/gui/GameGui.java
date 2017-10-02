@@ -3,6 +3,7 @@ package org.jnity.starstone.gui;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.io.IOException;
+import java.nio.channels.SelectableChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -17,21 +18,25 @@ import org.jnity.starstone.events.GameListener;
 import org.jnity.starstone.gui.shaders.CardShader;
 import org.jnity.starstone.gui.shaders.CreatureShader;
 import org.jnity.starstone.gui.shaders.SimpleVertexShader;
+import org.jnity.starstone.protoss.ShieldRecharge;
 import org.jnity.starstone.protoss.ShildBattery;
 import org.jnity.starstone.protoss.Zealot;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 import base.Camera;
 import base.Object3d;
 import base.Scene;
+import io.ResourceController;
 import jglsl.base.ShaderProcessor;
 import materials.Shader;
 import materials.SimpleMaterial;
 import materials.Texture;
 import materials.Texture2D;
 import properties.Mesh;
+import properties.MultiMesh;
 import utils.PrimitiveFactory;
 
 public class GameGui extends Thread implements GameListener {
@@ -39,8 +44,10 @@ public class GameGui extends Thread implements GameListener {
 	
 
 	private final ConcurrentLinkedQueue<StoredEvent> events = new ConcurrentLinkedQueue<>();
+	private Game game;
 
 	public GameGui(Game game) throws IOException {
+		this.game = game;
 		game.addListener(this);
 		start();
 	}
@@ -65,13 +72,15 @@ public class GameGui extends Thread implements GameListener {
 		scene.add(cameraBox);
 		
 		GuiCard.init(scene.getMaterialLibrary());
-
-		scene.add();
+		MouseProcess.endTurnButton = scene.add(ResourceController.getOrCreate().getOrLoadMesh(new MultiMesh(), "cube.smd"));
+		MouseProcess.endTurnButton.getPosition().setTranslation(6,0,0).setScale(0.5f, 0.1f, 0.2f);
+		MouseProcess.game = game;
 		camera.getPosition().move(0, -10, 0).roll(90).turn(90);
 		scene.setBackColor(new Vector3f(0.5f, 1, 0.5f));
 		long sysTime = 0;
 		float time = 0;
 		Animation animation = new StubAnimation();
+
 		while (!Display.isCloseRequested()) {
 			
 			float deltaTime = 0;
@@ -82,14 +91,16 @@ public class GameGui extends Thread implements GameListener {
 			}
 			time += deltaTime;
 			sysTime = System.currentTimeMillis();
+			MouseProcess.tick(scene, camera);
 			
 			if(!animation.isFinished()) {
 				animation.play(deltaTime, scene);
 			} else if(!events.isEmpty()) {
 				StoredEvent event = events.poll();
 				animation = Animation.createFor(event, scene);
-				Display.setTitle(event.getType()+"");
 			}
+			
+			scene.tick(deltaTime);
 			scene.render(camera);
 			Display.update();
 		}
@@ -115,29 +126,36 @@ public class GameGui extends Thread implements GameListener {
 	public static void main(String[] args) throws IOException {
 		TextHolder.load("./text/ru.inf");
 		List<Card> deck1 = new ArrayList<>();
+		
 		deck1.add(new Zealot());
+		deck1.add(new ShieldRecharge());
+		deck1.add(new Zealot());
+		deck1.add(new ShieldRecharge());
 		deck1.add(new ShildBattery());
+		deck1.add(new ShildBattery());
+		deck1.add(new Zealot());
+		
 		Player p1 = new Player("Первый игрок", deck1);
 		Player p2 = new Player("Второй второй", deck1);
 		Game game = new Game(p1, p2);
 		new GameGui(game);
-		
 		game.nextTurn();
-		p1.play(p1.getHand().get(0), null, 0);
-		p1.getCreatures().forEach(c -> c.takeDamage(1));
+		/*for(int i=0;i<4;i++){
+			p1.play(p1.getHand().get(0), null, 0);
+			game.nextTurn();
+			p2.play(p2.getHand().get(0), null, 0);
+			game.nextTurn();
+		}
 		game.nextTurn();
-		game.nextTurn();
-		p1.play(p1.getHand().get(0), null, 0);
-		p1.getCreatures().forEach(c -> c.takeDamage(1));
-		game.nextTurn();
-		game.nextTurn();
-		p1.getCreatures().forEach(c -> c.takeDamage(1));
-		game.nextTurn();
+		p2.play(p2.getHand().get(0), null, 0);
 		game.nextTurn();
 		p1.getCreatures().forEach(c -> c.takeDamage(1));
 		game.nextTurn();
 		game.nextTurn();
 		p1.getCreatures().forEach(c -> c.takeDamage(1));
+		game.nextTurn();
+		game.nextTurn();
+		p1.getCreatures().forEach(c -> c.takeDamage(1));*/
 	}
 
 }
