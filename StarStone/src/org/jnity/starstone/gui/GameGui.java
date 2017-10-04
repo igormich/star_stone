@@ -81,19 +81,19 @@ public class GameGui extends Thread implements GameListener {
 			scene.setBackColor(new Vector3f(0.5f, 1, 0.5f));
 			long sysTime = 0;
 			float time = 0;
-			// animation = new StubAnimation();
 			mouseProcess = new MouseProcess(scene, camera);
 			while (!Display.isCloseRequested()) {
 
 				float deltaTime = 0;
 				if (System.currentTimeMillis() - sysTime < 1000) {
 					deltaTime = (System.currentTimeMillis() - sysTime) / 1000f;
-					if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+					//if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
 						deltaTime *= 10;
 				}
+				//System.out.println(deltaTime);
 				time += deltaTime;
 				sysTime = System.currentTimeMillis();
-				mouseProcess.tick(our_player == game.getActivePlayer());
+				mouseProcess.tick();
 
 				if (animation != null && !animation.isFinished()) {
 					animation.play(deltaTime, scene);
@@ -106,8 +106,9 @@ public class GameGui extends Thread implements GameListener {
 						StoredEvent event = events.peek();
 						if (event.getType() == GameEvent.GAME_BEGIN) {
 							our_player = (Player) event.getCard();
+							mouseProcess.player = our_player;
 						}
-						animation = Animation.createFor(event, scene);
+						animation = Animation.createFor(event, scene, our_player);
 						System.out.println("read anim " + animation);
 					}
 				}
@@ -158,7 +159,7 @@ public class GameGui extends Thread implements GameListener {
 		Game game = new Game(p1, p2);
 		new GameGui(game);
 		game.nextTurn();
-		p1.play(p1.getHand().get(0), null, 0);
+		//p1.play(p1.getHand().get(0), null, 0);
 		/*
 		 * for(int i=0;i<4;i++){ p1.play(p1.getHand().get(0), null, 0);
 		 * game.nextTurn(); p2.play(p2.getHand().get(0), null, 0);

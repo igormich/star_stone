@@ -10,7 +10,7 @@ import org.jnity.starstone.events.GameEvent;
 import org.jnity.starstone.events.GameListener;
 
 public class Game {
-	private final List<GameListener> listeners = new ArrayList<>();
+	private final ArrayList<GameListener> listeners = new ArrayList<>();
 	private final List<Player> players = new ArrayList<>();
 	private volatile int turnNumber = 0;
 	private Player activePlayer;
@@ -39,14 +39,14 @@ public class Game {
 
 	public void emit(GameEvent gameEvent, Card card, CreatureCard target) {
 		Debug.print(card + " " + gameEvent + " " + target);
-		for (GameListener gameListener : listeners) {
+		for (GameListener gameListener : (ArrayList<GameListener>)listeners.clone()) {
 			gameListener.on(gameEvent, card, target);
 		}
 	}
 
 	public void emit(GameEvent gameEvent, Card card) {
 		Debug.print(gameEvent + " " + card);
-		for (GameListener gameListener : listeners) {
+		for (GameListener gameListener :  (ArrayList<GameListener>)listeners.clone()) {
 			gameListener.on(gameEvent, card);
 		}
 	}
@@ -55,6 +55,15 @@ public class Game {
 		if (activePlayer == null) {
 			activePlayer = players.get(0);
 			emit(GameEvent.GAME_BEGIN, activePlayer);
+			players.get(0).drawCard();
+			players.get(0).drawCard();
+			players.get(0).drawCard();
+			
+			players.get(1).drawCard();
+			players.get(1).drawCard();
+			players.get(1).drawCard();
+			players.get(1).drawCard();
+			
 		} else {
 			emit(GameEvent.END_OF_TURN, activePlayer);
 			if (activePlayer.equals(players.get(0))) {
@@ -65,9 +74,6 @@ public class Game {
 		}
 		turnNumber++;
 		emit(GameEvent.NEW_TURN, activePlayer);
-		activePlayer.drawCard();
-		activePlayer.drawCard();
-		activePlayer.drawCard();
 	}
 
 	public int getTurnNumber() {

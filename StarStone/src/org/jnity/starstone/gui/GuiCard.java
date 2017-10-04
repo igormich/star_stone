@@ -7,9 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jnity.starstone.cards.Card;
+import org.jnity.starstone.cards.CreatureCard;
 import org.jnity.starstone.gui.shaders.CardShader;
 import org.jnity.starstone.gui.shaders.SimpleVertexShader;
 import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 import base.Object3d;
 import base.ObjectPosition;
@@ -36,6 +38,8 @@ public class GuiCard extends Object3d{
 		cardShader = ShaderProcessor.build(SimpleVertexShader.class, CardShader.class);
 		Texture backGround = new Texture2D("protoss.png");
 		cardShader.addTexture(backGround, "backTex");
+		Texture numbers = new Texture2D("numbers.png");
+		cardShader.addTexture(numbers, "numbersTex");
 		cardShader.setBlendMode(SimpleMaterial.ALPHATEST50);
 		materialLibrary.addMaterial("cardShader", cardShader);
 	}
@@ -68,9 +72,16 @@ public class GuiCard extends Object3d{
 			int g = (getID() >> 8) & 0xff;
 			int b = (getID() >> 16) & 0xff;
 			glColor3f(r / 255f, g / 255f, b / 255f);
+		} else {
+			cardShader.addTexture(faceTex, "faceTex");
+			if(card instanceof CreatureCard) {
+				CreatureCard cCard = (CreatureCard) card;
+				cardShader.setUniform(new Vector4f(card.getPriceInMineral(), card.getPriceInGas(), cCard.getPower(), cCard.getCurrentHits()), "stats");
+			} else {
+				cardShader.setUniform(new Vector4f(card.getPriceInMineral(), card.getPriceInGas(), 0, 0), "stats");
+			}
+			
 		}
-		
-		cardShader.addTexture(faceTex, "faceTex");
 		cardMesh.render(renderContex, this);
 		((ObjectPosition)getPosition()).unApply();
 	}
@@ -106,6 +117,10 @@ public class GuiCard extends Object3d{
 
 	public void startMoving(Vector3f vector3f) {
 		startMoving(getPosition().getTranslation(), vector3f);
+	}
+
+	public Card getCard() {
+		return card;
 	}
 
 
