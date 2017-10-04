@@ -81,7 +81,7 @@ public class Card extends ModifierContainer implements Cloneable, Serializable{
 		return result;
 	}
 	
-	public void play(TargetWithHits target) {
+	public void play(CreatureCard target) {
 		getGame().emit(GameEvent.PLAY, this);
 	}
 

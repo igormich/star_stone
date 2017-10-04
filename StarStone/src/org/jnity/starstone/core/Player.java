@@ -6,10 +6,9 @@ import java.util.List;
 
 import org.jnity.starstone.cards.Card;
 import org.jnity.starstone.cards.CreatureCard;
-import org.jnity.starstone.cards.TargetWithHits;
 import org.jnity.starstone.events.GameEvent;
 import org.jnity.starstone.events.GameListener;
-import org.jnity.starstone.protoss.PlasmaShield;
+import org.jnity.starstone.modifier.Modifier;
 
 public class Player extends CreatureCard implements GameListener{
 
@@ -26,7 +25,22 @@ public class Player extends CreatureCard implements GameListener{
 	private ArrayList<CreatureCard> creatures = new ArrayList<>();
 	private ArrayList<Card> hand = new ArrayList<>();
 	private ArrayList<Card> deck = new ArrayList<>();
-
+	private int maxMinerals;
+	private int maxVespenGase;
+	
+	public int getMaxMinerals() {
+		int result = maxMinerals;
+		for (Modifier modifier : getModifiers())
+			result = modifier.modifyMaxMinerals(result, this);
+		return result;
+	}
+	public int getMaxVespenGase() {
+		int result = maxVespenGase;
+		for (Modifier modifier : getModifiers())
+			result = modifier.modifyMaxVespenGase(result, this);
+		return result;
+	}
+	
 	public List<CreatureCard> getCreatures() {
 		return (List<CreatureCard>) creatures.clone();
 	}
@@ -63,7 +77,7 @@ public class Player extends CreatureCard implements GameListener{
 		game.addListener(this);
 	}
 
-	public void play(Card card, TargetWithHits target, int position) {
+	public void play(Card card, CreatureCard target, int position) {
 		if(!hand.contains(card))
 			throw new GameException("Card must be played from hand");
 		if(!card.canBePlayed())

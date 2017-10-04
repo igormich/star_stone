@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.jnity.starstone.cards.Card;
 import org.jnity.starstone.cards.CreatureCard;
-import org.jnity.starstone.cards.TargetWithHits;
 import org.jnity.starstone.core.Debug;
 import org.jnity.starstone.events.GameEvent;
 import org.jnity.starstone.events.GameListener;
@@ -18,7 +17,7 @@ public class ShildBattery extends CreatureCard implements GameListener {
 	}
 
 	@Override
-	public void play(TargetWithHits target) {
+	public void play(CreatureCard target) {
 		super.play(target);
 		getGame().addListener(this);
 	}

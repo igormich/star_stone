@@ -35,4 +35,12 @@ public interface Modifier {
 	default boolean modifyCanBePlayed(boolean value, Card card) {
 		return value;
 	}
+	
+	default int modifyMaxMinerals(int value, Player player) {
+		return value;
+	}
+	
+	default int modifyMaxVespenGase(int value, Player player) {
+		return value;
+	}
 }
