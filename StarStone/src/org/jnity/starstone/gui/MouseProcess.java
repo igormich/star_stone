@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jnity.starstone.cards.Card;
+import org.jnity.starstone.cards.CreatureCard;
 import org.jnity.starstone.core.Game;
 import org.jnity.starstone.core.Player;
 import org.lwjgl.input.Mouse;
@@ -35,7 +36,7 @@ public class MouseProcess {
 		scene.getMaterialLibrary().addMaterial("green", new SimpleMaterial(0, 1, 0));
 
 		for (int i = 0; i < 14; i++) {
-			Mesh placeMesh = PrimitiveFactory.createPlane(0.9f, 3);
+			Mesh placeMesh = PrimitiveFactory.createPlane(1f, 3);
 			Object3d place = scene.add(placeMesh);
 			place.getPosition().setTranslation(i - 7, 0, -2.8f);
 			places.add(place);
@@ -52,15 +53,17 @@ public class MouseProcess {
 			pos.y = 0;
 			pos.z = ((float) y / Display.getHeight() - 0.5f) * 10;
 			((GuiCard) selected).startMoving(pos, pos);
-			selected.setVisible(false);
+			//selected.setVisible(false);
+			GuiCard.all(c -> c.setVisible(false));
 			if (places.contains(underCursor)) {
 				underCursor.get(Mesh.class).setMaterialName("green");
 			}
 			underCursor = scene.getObject(x, y, camera);
+			GuiCard.all(c -> c.setVisible(true));
 			if (places.contains(underCursor)) {
 				underCursor.get(Mesh.class).setMaterialName("red");
 			}
-			selected.setVisible(true);
+			//selected.setVisible(true);
 		} else {
 			underCursor = scene.getObject(x, y, camera);
 		}
@@ -90,15 +93,15 @@ public class MouseProcess {
 				} else {
 					if (selected != null) {
 						if (places.contains(underCursor)) {
-							Card card = selected.getCard();
-							int i = places.indexOf(underCursor);
-							int count = player.getCreatures().size();
-							int place = (i-count/2)/2;
-							if(place<0)
-								place = 0;
-							if(place>count)
-								place = count;
+							List<CreatureCard> creatures = player.getCreatures();
+							int place = 0;
+							for(CreatureCard creatureCard: creatures) {
+								if(GuiCard .get(creatureCard).getPosition().getTranslation().x > selected.getPosition().getTranslation().x)
+									break;
+								place++;
+							}
 							int p = place;
+							Card card = selected.getCard();
 							new Thread(() -> player.play(card, null, p)).start();
 						} else {
 							selected.startMoving(basePos);

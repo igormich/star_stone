@@ -3,6 +3,7 @@ package org.jnity.starstone.core;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.jnity.starstone.cards.Card;
 import org.jnity.starstone.cards.CreatureCard;
@@ -12,7 +13,7 @@ import org.jnity.starstone.events.GameListener;
 public class Game {
 	private final ArrayList<GameListener> listeners = new ArrayList<>();
 	private final List<Player> players = new ArrayList<>();
-	private volatile int turnNumber = 0;
+	private AtomicInteger turnNumber = new AtomicInteger(0);
 	private Player activePlayer;
 
 	public Game(Player p1, Player p2) {
@@ -59,6 +60,10 @@ public class Game {
 			players.get(0).drawCard();
 			players.get(0).drawCard();
 			
+			players.get(0).drawCard();
+			players.get(0).drawCard();
+			players.get(0).drawCard();
+			
 			players.get(1).drawCard();
 			players.get(1).drawCard();
 			players.get(1).drawCard();
@@ -72,12 +77,12 @@ public class Game {
 				activePlayer = players.get(0);
 			}
 		}
-		turnNumber++;
+		turnNumber.incrementAndGet();
 		emit(GameEvent.NEW_TURN, activePlayer);
 	}
 
 	public int getTurnNumber() {
-		return turnNumber;
+		return turnNumber.get();
 	}
 
 }

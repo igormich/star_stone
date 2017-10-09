@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.glColor3f;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import org.jnity.starstone.cards.Card;
 import org.jnity.starstone.cards.CreatureCard;
@@ -57,7 +58,7 @@ public class GuiCard extends Object3d{
 			faceTex = new Texture2D(card.getID().toLowerCase() +".jpg", false);
 		} catch (IOException e) {
 			e.printStackTrace();
-			new RuntimeException(e);
+			throw new RuntimeException(e);
 		}
 		card2card.put(card, this);
 	}
@@ -121,6 +122,11 @@ public class GuiCard extends Object3d{
 
 	public Card getCard() {
 		return card;
+	}
+
+	public static void all(Consumer<GuiCard> cardAction) {
+		card2card.values().forEach(cardAction);
+		
 	}
 
 

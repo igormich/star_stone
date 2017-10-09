@@ -14,6 +14,7 @@ public class Player extends CreatureCard implements GameListener{
 
 	private static final long serialVersionUID = 3148587577944545132L;
 	private static final int MAX_HAND_SIZE = 10;
+	private static final int MAX_CREATURE_COUNT = 7;
 
 	public Player(String name, List<Card> deck) {
 		super(name, 0, 0, 30, 0);
@@ -26,7 +27,9 @@ public class Player extends CreatureCard implements GameListener{
 	private ArrayList<Card> hand = new ArrayList<>();
 	private ArrayList<Card> deck = new ArrayList<>();
 	private int maxMinerals;
+	private int currentMinerals;
 	private int maxVespenGase;
+	private int currentVespenGase;
 	
 	public int getMaxMinerals() {
 		int result = maxMinerals;
@@ -84,13 +87,19 @@ public class Player extends CreatureCard implements GameListener{
 			throw new GameException("Card can't be played");
 		hand.remove(card);
 		if(card instanceof CreatureCard) {
-			creatures.add(position, (CreatureCard) card);
+			putCreature(card, position);
 		}
 		card.play(target);
 	}
 
+	public void putCreature(Card card, int position) {
+		if(creatures.size()<MAX_CREATURE_COUNT) {
+			if(position>-1 && position<MAX_CREATURE_COUNT)
+				creatures.add(position, (CreatureCard) card);
+		}
+	}
 	public boolean hasResoursesFor(Card card) {
-		return true;//add check mineral and gas 
+		return getCurrentMinerals()>=card.getPriceInMineral() && getCurrentVespenGase()>=card.getPriceInGas();
 	}
 
 	public List<CreatureCard> getCreaturesNear(CreatureCard creature) {
@@ -109,5 +118,17 @@ public class Player extends CreatureCard implements GameListener{
 		if(GameEvent.DIES == gameEvent && creatures.contains(card)) {
 			creatures.remove(card);
 		}
+	}
+	public int getCurrentMinerals() {
+		return currentMinerals;
+	}
+	public void setCurrentMinerals(int currentMinerals) {
+		this.currentMinerals = currentMinerals;
+	}
+	public int getCurrentVespenGase() {
+		return currentVespenGase;
+	}
+	public void setCurrentVespenGase(int currentVespenGase) {
+		this.currentVespenGase = currentVespenGase;
 	}
 }
