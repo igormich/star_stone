@@ -27,16 +27,6 @@ public class Launcher {
 		Game game = new Game(p1, p2);
 		new GameGui(game);
 		game.nextTurn();
-		//p1.play(p1.getHand().get(0), null, 0);
-		/*
-		 * for(int i=0;i<4;i++){ p1.play(p1.getHand().get(0), null, 0);
-		 * game.nextTurn(); p2.play(p2.getHand().get(0), null, 0);
-		 * game.nextTurn(); } game.nextTurn(); p2.play(p2.getHand().get(0),
-		 * null, 0); game.nextTurn(); p1.getCreatures().forEach(c ->
-		 * c.takeDamage(1)); game.nextTurn(); game.nextTurn();
-		 * p1.getCreatures().forEach(c -> c.takeDamage(1)); game.nextTurn();
-		 * game.nextTurn(); p1.getCreatures().forEach(c -> c.takeDamage(1));
-		 */
 	}
 }
 

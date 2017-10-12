@@ -69,9 +69,10 @@ public class GuiCard extends Object3d{
 			return;
 		((ObjectPosition)getPosition()).apply();
 		if (renderContex.selectMode()) {
-			int r = getID() & 0xff;
-			int g = (getID() >> 8) & 0xff;
-			int b = (getID() >> 16) & 0xff;
+			int id = getID();
+			int r = id & 0xff;
+			int g = (id >> 8) & 0xff;
+			int b = (id >> 16) & 0xff;
 			glColor3f(r / 255f, g / 255f, b / 255f);
 		} else {
 			cardShader.addTexture(faceTex, "faceTex");
@@ -126,7 +127,6 @@ public class GuiCard extends Object3d{
 
 	public static void all(Consumer<GuiCard> cardAction) {
 		card2card.values().forEach(cardAction);
-		
 	}
 
 

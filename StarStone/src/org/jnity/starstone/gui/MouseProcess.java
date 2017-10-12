@@ -1,6 +1,5 @@
 package org.jnity.starstone.gui;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.jnity.starstone.cards.Card;
@@ -14,7 +13,6 @@ import org.lwjgl.util.vector.Vector3f;
 import base.Camera;
 import base.Object3d;
 import base.Scene;
-import materials.SimpleMaterial;
 import properties.Mesh;
 import utils.PrimitiveFactory;
 
@@ -27,54 +25,37 @@ public class MouseProcess {
 	public static Player player;
 	private Scene scene;
 	private Camera camera;
-	private List<Object3d> places = new ArrayList<>();
+	private Object3d place;
 
 	public MouseProcess(Scene scene, Camera camera) {
 		this.scene = scene;
 		this.camera = camera;
-		scene.getMaterialLibrary().addMaterial("red", new SimpleMaterial(1, 0, 0));
-		scene.getMaterialLibrary().addMaterial("green", new SimpleMaterial(0, 1, 0));
-
-		for (int i = 0; i < 14; i++) {
-			Mesh placeMesh = PrimitiveFactory.createPlane(1f, 3);
-			Object3d place = scene.add(placeMesh);
-			place.getPosition().setTranslation(i - 7, 0, -2.8f);
-			places.add(place);
-		}
+		Mesh placeMesh = PrimitiveFactory.createPlane(14f, 3);
+		place = scene.add(placeMesh);
+		place.getPosition().setTranslation(0, 0, -2.8f);
 	}
 
 	public void tick() {
 		int x = Mouse.getX();
 		int y = Mouse.getY();
-
-		if (selected != null) {
+		underCursor = scene.getObject(x, y, camera);
+		/*if (selected != null) {
 			Vector3f pos = new Vector3f();
 			pos.x = ((float) x / Display.getWidth() - 0.5f) * 14;
 			pos.y = 0;
 			pos.z = ((float) y / Display.getHeight() - 0.5f) * 10;
 			((GuiCard) selected).startMoving(pos, pos);
-			//selected.setVisible(false);
-			GuiCard.all(c -> c.setVisible(false));
-			if (places.contains(underCursor)) {
-				underCursor.get(Mesh.class).setMaterialName("green");
-			}
+			//GuiCard.all(c -> c.setVisible(false));
 			underCursor = scene.getObject(x, y, camera);
-			GuiCard.all(c -> c.setVisible(true));
-			if (places.contains(underCursor)) {
-				underCursor.get(Mesh.class).setMaterialName("red");
-			}
-			//selected.setVisible(true);
+			//GuiCard.all(c -> c.setVisible(true));
 		} else {
 			underCursor = scene.getObject(x, y, camera);
-		}
+		}*/
 		boolean canTouch = game.getActivePlayer().equals(player);
-		//if(underCursor instanceof GuiCard) {
-		//	canTouch&=((GuiCard)underCursor).getCard().getOwner().equals(player);
-		//}
 		while (Mouse.next()) {
 			if (Mouse.getEventButton() > -1) {
 				if (Mouse.getEventButtonState()) {
-					System.out.println(canTouch);
+					
 					if ((underCursor != null) && (underCursor.equals(endTurnButton))) {
 						new Thread(() -> game.nextTurn()).start();
 						return;
@@ -92,7 +73,7 @@ public class MouseProcess {
 						basePos = selected.getPosition().getTranslation();
 				} else {
 					if (selected != null) {
-						if (places.contains(underCursor)) {
+						if (place.equals(underCursor)) {
 							List<CreatureCard> creatures = player.getCreatures();
 							int place = 0;
 							for(CreatureCard creatureCard: creatures) {
@@ -111,7 +92,10 @@ public class MouseProcess {
 				}
 			}
 		}
-		Display.setTitle("" + selected);
+		if(underCursor!=null) {
+			Display.setTitle("" + underCursor.getID());
+		} else
+			Display.setTitle("-1");
 
 	}
 
