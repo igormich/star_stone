@@ -1,6 +1,7 @@
 package org.jnity.starstone.gui;
 
 import static org.lwjgl.opengl.GL11.glColor3f;
+import static org.lwjgl.opengl.GL20.glUseProgram;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -24,6 +25,7 @@ import materials.SimpleMaterial;
 import materials.Texture;
 import materials.Texture2D;
 import properties.Mesh;
+import properties.Property3d;
 import utils.PrimitiveFactory;
 
 public class GuiCard extends Object3d{
@@ -61,31 +63,30 @@ public class GuiCard extends Object3d{
 			throw new RuntimeException(e);
 		}
 		card2card.put(card, this);
-	}
-	
-	@Override
-	public void render(RenderContex renderContex) {
-		if (!isVisible())
-			return;
-		((ObjectPosition)getPosition()).apply();
-		if (renderContex.selectMode()) {
-			int id = getID();
-			int r = id & 0xff;
-			int g = (id >> 8) & 0xff;
-			int b = (id >> 16) & 0xff;
-			glColor3f(r / 255f, g / 255f, b / 255f);
-		} else {
-			cardShader.addTexture(faceTex, "faceTex");
-			if(card instanceof CreatureCard) {
-				CreatureCard cCard = (CreatureCard) card;
-				cardShader.setUniform(new Vector4f(card.getPriceInMineral(), card.getPriceInGas(), cCard.getPower(), cCard.getCurrentHits()), "stats");
-			} else {
-				cardShader.setUniform(new Vector4f(card.getPriceInMineral(), card.getPriceInGas(), 0, 0), "stats");
+		
+		add(new Property3d() {
+			
+			@Override
+			public Property3d fastClone() {
+				return null;
+			}
+
+			@Override
+			public void render(RenderContex renderContex, Object3d owner) {
+				if (renderContex.useMaterial()) {
+				cardShader.addTexture(faceTex, "faceTex");
+				if(card instanceof CreatureCard) {
+					CreatureCard cCard = (CreatureCard) card;
+					cardShader.setUniform(new Vector4f(card.getPriceInMineral(), card.getPriceInGas(), cCard.getPower(), cCard.getCurrentHits()), "stats");
+				} else {
+					cardShader.setUniform(new Vector4f(card.getPriceInMineral(), card.getPriceInGas(), 0, 0), "stats");
+				}
+				}
+				cardMesh.render(renderContex, owner);
 			}
 			
-		}
-		cardMesh.render(renderContex, this);
-		((ObjectPosition)getPosition()).unApply();
+		});
+		setName(card.getName());
 	}
 
 	public static GuiCard get(Card card) {

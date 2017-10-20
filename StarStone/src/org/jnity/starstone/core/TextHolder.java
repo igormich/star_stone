@@ -15,7 +15,8 @@ public class TextHolder {
 	public static void load(String fileName) throws IOException{
 		text.clear();
 		int n=1;
-		for(String line:Files.readAllLines(new File(fileName).toPath(),Charset.defaultCharset())){
+		System.out.println(Charset.availableCharsets());
+		for(String line:Files.readAllLines(new File(fileName).toPath(), Charset.forName("UTF-8"))){
 			try{
 			String[] keyValue = line.split("=");
 			text.put(keyValue[0], keyValue[1]);

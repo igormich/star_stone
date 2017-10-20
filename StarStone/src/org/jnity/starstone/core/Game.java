@@ -60,10 +60,6 @@ public class Game {
 			players.get(0).drawCard();
 			players.get(0).drawCard();
 			
-			players.get(0).drawCard();
-			players.get(0).drawCard();
-			players.get(0).drawCard();
-			
 			players.get(1).drawCard();
 			players.get(1).drawCard();
 			players.get(1).drawCard();

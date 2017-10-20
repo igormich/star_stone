@@ -38,24 +38,22 @@ public class MouseProcess {
 	public void tick() {
 		int x = Mouse.getX();
 		int y = Mouse.getY();
-		underCursor = scene.getObject(x, y, camera);
-		/*if (selected != null) {
+		if (selected != null) {
 			Vector3f pos = new Vector3f();
 			pos.x = ((float) x / Display.getWidth() - 0.5f) * 14;
 			pos.y = 0;
 			pos.z = ((float) y / Display.getHeight() - 0.5f) * 10;
 			((GuiCard) selected).startMoving(pos, pos);
-			//GuiCard.all(c -> c.setVisible(false));
+			GuiCard.all(c -> c.setVisible(false));
 			underCursor = scene.getObject(x, y, camera);
-			//GuiCard.all(c -> c.setVisible(true));
+			GuiCard.all(c -> c.setVisible(true));
 		} else {
 			underCursor = scene.getObject(x, y, camera);
-		}*/
+		}
 		boolean canTouch = game.getActivePlayer().equals(player);
 		while (Mouse.next()) {
 			if (Mouse.getEventButton() > -1) {
 				if (Mouse.getEventButtonState()) {
-					
 					if ((underCursor != null) && (underCursor.equals(endTurnButton))) {
 						new Thread(() -> game.nextTurn()).start();
 						return;
@@ -65,7 +63,7 @@ public class MouseProcess {
 					}
 					if(underCursor instanceof GuiCard) {
 						GuiCard guiCard = (GuiCard) underCursor;
-						if(player.getHand().contains(guiCard.getCard()))
+						if(player.canPlay(guiCard.getCard()))
 							selected = (GuiCard) guiCard;
 					}
 					underCursor = null;
@@ -93,7 +91,7 @@ public class MouseProcess {
 			}
 		}
 		if(underCursor!=null) {
-			Display.setTitle("" + underCursor.getID());
+			//Display.setTitle("" + underCursor.getName());
 		} else
 			Display.setTitle("-1");
 

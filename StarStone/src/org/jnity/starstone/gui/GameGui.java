@@ -2,11 +2,14 @@ package org.jnity.starstone.gui;
 
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.io.File;
 import java.io.IOException;
 import java.nio.channels.SelectableChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import javax.imageio.ImageIO;
 
 import org.jnity.starstone.cards.Card;
 import org.jnity.starstone.cards.CreatureCard;
@@ -112,7 +115,11 @@ public class GameGui extends Thread implements GameListener {
 						System.out.println("read anim " + animation);
 					}
 				}
-
+				if (Keyboard.isKeyDown(Keyboard.KEY_F4)) {
+					Texture2D screenshot = new Texture2D(width, height);
+					scene.renderToTexture(camera, screenshot);
+					ImageIO.write(screenshot.getImage(),"PNG",new File("screenshot.png"));
+				}
 				scene.tick(deltaTime);
 				scene.render(camera);
 				Display.update();

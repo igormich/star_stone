@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.jnity.starstone.cards.Card;
 import org.jnity.starstone.cards.CreatureCard;
+import org.jnity.starstone.cards.SpellCard;
 import org.jnity.starstone.events.GameEvent;
 import org.jnity.starstone.events.GameListener;
 import org.jnity.starstone.modifier.Modifier;
@@ -26,9 +27,9 @@ public class Player extends CreatureCard implements GameListener{
 	private ArrayList<CreatureCard> creatures = new ArrayList<>();
 	private ArrayList<Card> hand = new ArrayList<>();
 	private ArrayList<Card> deck = new ArrayList<>();
-	private int maxMinerals;
+	private int maxMinerals = 0;
 	private int currentMinerals;
-	private int maxVespenGase;
+	private int maxVespenGase = 0;
 	private int currentVespenGase;
 	
 	public int getMaxMinerals() {
@@ -118,6 +119,10 @@ public class Player extends CreatureCard implements GameListener{
 		if(GameEvent.DIES == gameEvent && creatures.contains(card)) {
 			creatures.remove(card);
 		}
+		if(GameEvent.NEW_TURN == gameEvent && card.equals(this)) {
+			maxMinerals++;
+			currentMinerals = maxMinerals;
+		}
 	}
 	public int getCurrentMinerals() {
 		return currentMinerals;
@@ -131,4 +136,13 @@ public class Player extends CreatureCard implements GameListener{
 	public void setCurrentVespenGase(int currentVespenGase) {
 		this.currentVespenGase = currentVespenGase;
 	}
+	@Override
+	public String toString() {
+		return  getName() +" Min:" + getCurrentMinerals() + "Gas:" + getCurrentVespenGase() + "Hits" + getCurrentHits();
+	}
+	public boolean canPlay(Card card) {
+		return getHand().contains(card) && hasResoursesFor(card) && 
+				(card instanceof SpellCard || creatures.size() < MAX_CREATURE_COUNT) ;
+	}
+	
 }

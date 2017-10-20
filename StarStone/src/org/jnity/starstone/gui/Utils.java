@@ -1,6 +1,5 @@
 package org.jnity.starstone.gui;
 
-
 import static org.lwjgl.opengl.GL11.GL_BACK;
 import static org.lwjgl.opengl.GL11.GL_COLOR_MATERIAL;
 import static org.lwjgl.opengl.GL11.GL_CULL_FACE;
@@ -32,24 +31,24 @@ import org.lwjgl.opengl.DisplayMode;
 
 public class Utils {
 
-	public static void initDisplay(int w,int h,boolean fullscreen) {
+	public static void initDisplay(int w, int h, boolean fullscreen) {
 		try {
 			Dimension screenSize = new Dimension(w, h);
-			if(w==0)
-			screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			DisplayMode targetDisplayMode=null;
-			for(DisplayMode mode:Display.getAvailableDisplayModes()){ 			
-				if((mode.getWidth()==screenSize.width)&&(mode.getHeight()==screenSize.height))
-					if ((targetDisplayMode == null) || (mode.getFrequency() >= targetDisplayMode.getFrequency())) 
-                        if ((targetDisplayMode == null) || (mode.getBitsPerPixel() > targetDisplayMode.getBitsPerPixel())) 
-                            targetDisplayMode = mode;
+			if (w == 0)
+				screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			DisplayMode targetDisplayMode = null;
+			for (DisplayMode mode : Display.getAvailableDisplayModes()) {
+				if ((mode.getWidth() == screenSize.width) && (mode.getHeight() == screenSize.height))
+					if ((targetDisplayMode == null) || (mode.getFrequency() >= targetDisplayMode.getFrequency()))
+						if ((targetDisplayMode == null) || (mode.getBitsPerPixel() > targetDisplayMode.getBitsPerPixel()))
+							targetDisplayMode = mode;
 			}
 			System.out.println(targetDisplayMode);
-			if(targetDisplayMode==null)
-				targetDisplayMode=new DisplayMode(w, h);
+			if (targetDisplayMode == null)
+				targetDisplayMode = new DisplayMode(w, h);
 			Display.setDisplayMode(targetDisplayMode);
 			Display.setVSyncEnabled(false);
-			if(fullscreen)
+			if (fullscreen)
 				Display.setFullscreen(true);
 			Display.create();
 		} catch (LWJGLException e) {
@@ -59,46 +58,50 @@ public class Utils {
 		}
 		initGL();
 	}
-	public static void initGL() {					// Select The Modelview Matrix
-		glLoadIdentity ();											// Reset The Modelview Matrix		
-		glClearColor (1.0f, 1.0f, 1.0f, 0.5f);						// Black Background
-		glClearDepth (1.0f);										// Depth Buffer Setup
-		glClearStencil(0); 
-		glDepthFunc (GL_LEQUAL);									// The Type Of Depth Testing (Less Or Equal)
+
+	public static void initGL() { // Select The Modelview Matrix
+		glLoadIdentity(); // Reset The Modelview Matrix
+		glClearColor(1.0f, 1.0f, 1.0f, 0.5f); // Black Background
+		glClearDepth(1.0f); // Depth Buffer Setup
+		glClearStencil(0);
+		glDepthFunc(GL_LEQUAL); // The Type Of Depth Testing (Less Or Equal)
 		glBlendFunc(GL_DST_COLOR, GL_SRC_COLOR);
-		glEnable (GL_DEPTH_TEST);									// Enable Depth Testing
-		glShadeModel (GL_SMOOTH);									// Select Smooth Shading
-		glHint (GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);			// Set Perspective Calculations To Most Accurate
-		glEnable ( GL_COLOR_MATERIAL ) ;
+		glEnable(GL_DEPTH_TEST); // Enable Depth Testing
+		glShadeModel(GL_SMOOTH); // Select Smooth Shading
+		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // Set Perspective
+															// Calculations To
+															// Most Accurate
+		glEnable(GL_COLOR_MATERIAL);
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 	}
+
 	public static void initDisplay(int w, int h, Canvas canvas) {
 		try {
 			Dimension screenSize = new Dimension(w, h);
-			if(w==0)
-			screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			DisplayMode targetDisplayMode=null;
-			for(DisplayMode mode:Display.getAvailableDisplayModes()){ 			
-				if((mode.getWidth()==screenSize.width)&&(mode.getHeight()==screenSize.height))
-					if ((targetDisplayMode == null) || (mode.getFrequency() >= targetDisplayMode.getFrequency())) 
-                        if ((targetDisplayMode == null) || (mode.getBitsPerPixel() > targetDisplayMode.getBitsPerPixel())) 
-                            targetDisplayMode = mode;
+			if (w == 0)
+				screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			DisplayMode targetDisplayMode = null;
+			for (DisplayMode mode : Display.getAvailableDisplayModes()) {
+				if ((mode.getWidth() == screenSize.width) && (mode.getHeight() == screenSize.height))
+					if ((targetDisplayMode == null) || (mode.getFrequency() >= targetDisplayMode.getFrequency()))
+						if ((targetDisplayMode == null) || (mode.getBitsPerPixel() > targetDisplayMode.getBitsPerPixel()))
+							targetDisplayMode = mode;
 			}
-			if(targetDisplayMode==null)
-				targetDisplayMode=new DisplayMode(w, h);
+			if (targetDisplayMode == null)
+				targetDisplayMode = new DisplayMode(w, h);
 			Display.setDisplayMode(targetDisplayMode);
 			Display.setVSyncEnabled(false);
 			Display.setParent(canvas);
 			Display.create();
-			
+
 		} catch (LWJGLException e) {
 			Display.destroy();
 			e.printStackTrace();
 			System.exit(0);
 		}
 		initGL();
-		
+
 	}
 
 }
