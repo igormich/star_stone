@@ -73,6 +73,7 @@ public class Game {
 				activePlayer = players.get(0);
 			}
 		}
+		activePlayer.drawCard();
 		turnNumber.incrementAndGet();
 		emit(GameEvent.NEW_TURN, activePlayer);
 	}

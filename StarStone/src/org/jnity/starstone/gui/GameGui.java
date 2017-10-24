@@ -19,7 +19,7 @@ import org.jnity.starstone.core.TextHolder;
 import org.jnity.starstone.events.GameEvent;
 import org.jnity.starstone.events.GameListener;
 import org.jnity.starstone.gui.shaders.CardShader;
-import org.jnity.starstone.gui.shaders.CreatureShader;
+import org.jnity.starstone.gui.shaders._CreatureShader;
 import org.jnity.starstone.gui.shaders.SimpleVertexShader;
 import org.jnity.starstone.protoss.ShieldRecharge;
 import org.jnity.starstone.protoss.ShildBattery;

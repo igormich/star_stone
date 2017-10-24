@@ -50,29 +50,6 @@ public class CardShader extends JFragmentShader {
 		}
 		color = add(mul(color, 1-number.a), number);
 		
-		//power
-		costText = mul(texCoord.st, numberScale);
-		costText.x-=0.2f;
-		costText.y-=numberScale-1-0.1f;
-		number = vec4(0f, 0f, 0f, 0f);
-		if(max(costText.x,costText.y)<1 && min(costText.x,costText.y)>0) { // better without if
-			costText.x-=0.1f;
-			costText.y+=stats.z;
-			number = texture2D(numbersTex, mul(costText, vec2(1f,0.1f)));
-		}
-		color = add(mul(color, 1-number.a), number);
-		
-		//hits
-		costText = mul(texCoord.st, numberScale);
-		costText.x-=numberScale-1-0.15f;
-		costText.y-=numberScale-1-0.1f;
-		number = vec4(0f, 0f, 0f, 0f);
-		if(max(costText.x,costText.y)<1 && min(costText.x,costText.y)>0) { // better without if
-			costText.y+=stats.w-0.1f;
-			number = texture2D(numbersTex, mul(costText, vec2(1f,0.1f)));
-		}
-		color = add(mul(color, 1-number.a), number);
-		
 		gl_FragColor = color;
 	}
 

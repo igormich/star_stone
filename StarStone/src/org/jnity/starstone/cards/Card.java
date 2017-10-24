@@ -99,4 +99,12 @@ public class Card extends ModifierContainer implements Cloneable, Serializable{
 			result = modifier.modifyPlayer(result, this);
 		return result;
 	}
+
+	public boolean needTarget() {
+		return false;
+	}
+
+	public boolean isValidTarget(Card target) {
+		return true;	
+	}
 }

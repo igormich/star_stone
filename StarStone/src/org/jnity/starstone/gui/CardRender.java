@@ -5,7 +5,7 @@ import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 
 import org.jnity.starstone.gui.shaders.CardShader;
-import org.jnity.starstone.gui.shaders.CreatureShader;
+import org.jnity.starstone.gui.shaders._CreatureShader;
 import org.jnity.starstone.gui.shaders.SimpleVertexShader;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -52,7 +52,7 @@ public class CardRender {
 		cardShader.setBlendMode(SimpleMaterial.ALPHATEST50);
 		scene.getMaterialLibrary().addMaterial("cardShader", cardShader);
 		
-		Shader creatureShader= ShaderProcessor.build(SimpleVertexShader.class, CreatureShader.class);
+		Shader creatureShader= ShaderProcessor.build(SimpleVertexShader.class, _CreatureShader.class);
 		Texture backGround1 = new Texture2D("u_protoss.png");
 		creatureShader.addTexture(backGround1, "backTex");
 		creatureShader.addTexture(zealotTex, "faceTex");

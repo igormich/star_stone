@@ -1,8 +1,5 @@
 package org.jnity.starstone.gui;
 
-import static org.lwjgl.opengl.GL11.glColor3f;
-import static org.lwjgl.opengl.GL20.glUseProgram;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,12 +8,12 @@ import java.util.function.Consumer;
 import org.jnity.starstone.cards.Card;
 import org.jnity.starstone.cards.CreatureCard;
 import org.jnity.starstone.gui.shaders.CardShader;
+import org.jnity.starstone.gui.shaders.CreatureShader;
 import org.jnity.starstone.gui.shaders.SimpleVertexShader;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
 import base.Object3d;
-import base.ObjectPosition;
 import base.RenderContex;
 import jglsl.base.ShaderProcessor;
 import materials.MaterialLibrary;
@@ -32,19 +29,25 @@ public class GuiCard extends Object3d{
 
 	private static Map<Card, GuiCard> card2card= new HashMap<>();
 	private static Shader cardShader;
+	private static Shader creatureShader;
 	private static Mesh cardMesh;
 	
 	
 	public static void init(MaterialLibrary materialLibrary) throws IOException {
 		cardMesh = PrimitiveFactory.createPlane(2.5f, 3.5f);
-		cardMesh.setMaterialName("cardShader");
+		
 		cardShader = ShaderProcessor.build(SimpleVertexShader.class, CardShader.class);
+		creatureShader = ShaderProcessor.build(SimpleVertexShader.class, CreatureShader.class);
 		Texture backGround = new Texture2D("protoss.png");
 		cardShader.addTexture(backGround, "backTex");
+		creatureShader.addTexture(backGround, "backTex");
 		Texture numbers = new Texture2D("numbers.png");
 		cardShader.addTexture(numbers, "numbersTex");
+		creatureShader.addTexture(numbers, "numbersTex");
 		cardShader.setBlendMode(SimpleMaterial.ALPHATEST50);
+		creatureShader.setBlendMode(SimpleMaterial.ALPHATEST50);
 		materialLibrary.addMaterial("cardShader", cardShader);
+		materialLibrary.addMaterial("creatureShader", creatureShader);
 	}
 	
 	private float time = 0;
@@ -68,17 +71,21 @@ public class GuiCard extends Object3d{
 			
 			@Override
 			public Property3d fastClone() {
-				return null;
+				return this;
 			}
 
 			@Override
 			public void render(RenderContex renderContex, Object3d owner) {
 				if (renderContex.useMaterial()) {
-				cardShader.addTexture(faceTex, "faceTex");
+				
 				if(card instanceof CreatureCard) {
 					CreatureCard cCard = (CreatureCard) card;
-					cardShader.setUniform(new Vector4f(card.getPriceInMineral(), card.getPriceInGas(), cCard.getPower(), cCard.getCurrentHits()), "stats");
+					cardMesh.setMaterialName("creatureShader");
+					creatureShader.addTexture(faceTex, "faceTex");
+					creatureShader.setUniform(new Vector4f(card.getPriceInMineral(), card.getPriceInGas(), cCard.getPower(), cCard.getCurrentHits()), "stats");
 				} else {
+					cardMesh.setMaterialName("cardShader");
+					cardShader.addTexture(faceTex, "faceTex");
 					cardShader.setUniform(new Vector4f(card.getPriceInMineral(), card.getPriceInGas(), 0, 0), "stats");
 				}
 				}
