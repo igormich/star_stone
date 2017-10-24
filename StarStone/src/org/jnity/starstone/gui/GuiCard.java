@@ -10,6 +10,7 @@ import org.jnity.starstone.cards.CreatureCard;
 import org.jnity.starstone.gui.shaders.CardShader;
 import org.jnity.starstone.gui.shaders.CreatureShader;
 import org.jnity.starstone.gui.shaders.SimpleVertexShader;
+import org.jnity.starstone.protoss.PlasmaShield;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
@@ -23,7 +24,6 @@ import materials.Texture;
 import materials.Texture2D;
 import properties.Mesh;
 import properties.Property3d;
-import utils.PrimitiveFactory;
 
 public class GuiCard extends Object3d{
 
@@ -31,21 +31,25 @@ public class GuiCard extends Object3d{
 	private static Shader cardShader;
 	private static Shader creatureShader;
 	private static Mesh cardMesh;
-	
+	private static Mesh creatureMesh;
 	
 	public static void init(MaterialLibrary materialLibrary) throws IOException {
-		cardMesh = PrimitiveFactory.createPlane(2.5f, 3.5f);
-		
+		cardMesh = CardMeshBuilder.createCardMesh();
+		creatureMesh = CardMeshBuilder.createCreatureMesh();
+		creatureMesh.setMaterialName("creatureShader");
 		cardShader = ShaderProcessor.build(SimpleVertexShader.class, CardShader.class);
 		creatureShader = ShaderProcessor.build(SimpleVertexShader.class, CreatureShader.class);
-		Texture backGround = new Texture2D("protoss.png");
+		Texture backGround = new Texture2D("s_protoss.png");
 		cardShader.addTexture(backGround, "backTex");
+		backGround = new Texture2D("protoss.png");
 		creatureShader.addTexture(backGround, "backTex");
 		Texture numbers = new Texture2D("numbers.png");
 		cardShader.addTexture(numbers, "numbersTex");
 		creatureShader.addTexture(numbers, "numbersTex");
 		cardShader.setBlendMode(SimpleMaterial.ALPHATEST50);
+		cardShader.setzWrite(false);
 		creatureShader.setBlendMode(SimpleMaterial.ALPHATEST50);
+		creatureShader.setzWrite(false);
 		materialLibrary.addMaterial("cardShader", cardShader);
 		materialLibrary.addMaterial("creatureShader", creatureShader);
 	}
@@ -83,13 +87,22 @@ public class GuiCard extends Object3d{
 					cardMesh.setMaterialName("creatureShader");
 					creatureShader.addTexture(faceTex, "faceTex");
 					creatureShader.setUniform(new Vector4f(card.getPriceInMineral(), card.getPriceInGas(), cCard.getPower(), cCard.getCurrentHits()), "stats");
+					Vector4f modifiers = new Vector4f();
+					if (card.getModifiers().stream().anyMatch(m -> m.getClass().equals(PlasmaShield.class)))
+						modifiers.x = 1;
+					creatureShader.setUniform(modifiers, "modifiers");
 				} else {
 					cardMesh.setMaterialName("cardShader");
 					cardShader.addTexture(faceTex, "faceTex");
 					cardShader.setUniform(new Vector4f(card.getPriceInMineral(), card.getPriceInGas(), 0, 0), "stats");
 				}
 				}
-				cardMesh.render(renderContex, owner);
+				if(card.getOwner().getCreatures().contains(card)) {
+					creatureMesh.render(renderContex, owner);
+				} else {
+					cardMesh.render(renderContex, owner);
+				}
+				creatureMesh.render(renderContex, owner);//remove
 			}
 			
 		});

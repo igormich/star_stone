@@ -76,15 +76,12 @@ public class GameGui extends Thread implements GameListener {
 			scene.add(cameraBox);
 
 			GuiCard.init(scene.getMaterialLibrary());
-			MouseProcess.endTurnButton = scene
-					.add(ResourceController.getOrCreate().getOrLoadMesh(new MultiMesh(), "cube.smd"));
-			MouseProcess.endTurnButton.getPosition().setTranslation(7, 0, 0).setScale(0.5f, 0.1f, 0.2f);
-			MouseProcess.game = game;
+			
 			camera.getPosition().move(0, -10, 0).roll(90).turn(90);
 			scene.setBackColor(new Vector3f(0.5f, 1, 0.5f));
 			long sysTime = 0;
 			float time = 0;
-			mouseProcess = new MouseProcess(scene, camera);
+			mouseProcess = new MouseProcess(scene, camera, game);
 			while (!Display.isCloseRequested()) {
 
 				float deltaTime = 0;
