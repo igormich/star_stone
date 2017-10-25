@@ -2,6 +2,7 @@ package org.jnity.starstone.cards;
 
 import org.jnity.starstone.events.GameEvent;
 import org.jnity.starstone.modifier.Modifier;
+import org.jnity.starstone.modifiers.SummonSick;
 
 public class CreatureCard extends Card {
 
@@ -69,5 +70,19 @@ public class CreatureCard extends Card {
 	@Override
 	public String toString() {
 		return super.toString() + " A:" +getPower() + " H:" +getCurrentHits();
+	}
+	@Override
+	public void play(CreatureCard target) {
+		super.play(target);
+		addModifier(new SummonSick(this));
+	}
+	
+	public boolean canAtack() {
+		if(getPower() <=0)
+			return false;
+		boolean result = true;
+		for (Modifier modifier : getModifiers())
+			result = modifier.modifyCanAtack(result, this);
+		return result;
 	}
 }

@@ -44,6 +44,8 @@ import utils.PrimitiveFactory;
 
 public class GameGui extends Thread implements GameListener {
 
+	public static final String SUMMON_SICK = "SUMMON_SICK";
+	public static final String CANT_ATACK = "CANT_ATACK";
 	private final ConcurrentLinkedQueue<StoredEvent> events = new ConcurrentLinkedQueue<>();
 	private Game game;
 	private Player our_player;
@@ -81,9 +83,8 @@ public class GameGui extends Thread implements GameListener {
 			scene.setBackColor(new Vector3f(0.5f, 1, 0.5f));
 			long sysTime = 0;
 			float time = 0;
-			mouseProcess = new MouseProcess(scene, camera, game);
+			mouseProcess = new MouseProcess(scene, camera, game, this);
 			while (!Display.isCloseRequested()) {
-
 				float deltaTime = 0;
 				if (System.currentTimeMillis() - sysTime < 1000) {
 					deltaTime = (System.currentTimeMillis() - sysTime) / 1000f;
@@ -132,8 +133,9 @@ public class GameGui extends Thread implements GameListener {
 	public void on(GameEvent gameEvent, Card card, CreatureCard target) {
 		events.add(new StoredEvent(gameEvent, card, target));
 		System.out.println("wait");
-		while (!events.isEmpty())
-			;
+		while (!events.isEmpty()){
+			
+		}
 		System.out.println("end anim");
 	}
 
@@ -141,9 +143,12 @@ public class GameGui extends Thread implements GameListener {
 	public void on(GameEvent gameEvent, Card card) {
 		events.add(new StoredEvent(gameEvent, card));
 		System.out.println("wait");
-		while (!events.isEmpty())
-			;
+		while (!events.isEmpty()){
+			
+		}
 		System.out.println("end anim");
 	}
-
+	public void setMessage(String message) {
+		Display.setTitle(TextHolder.getName(message));	
+	}
 }

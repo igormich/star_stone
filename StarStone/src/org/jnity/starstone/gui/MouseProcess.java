@@ -8,6 +8,7 @@ import org.jnity.starstone.cards.CreatureCard;
 import org.jnity.starstone.cards.SpellCard;
 import org.jnity.starstone.core.Game;
 import org.jnity.starstone.core.Player;
+import org.jnity.starstone.modifiers.SummonSick;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
@@ -39,13 +40,16 @@ public class MouseProcess {
 	private Camera camera;
 	private Object3d place;
 	private State state = State.WAIT;
+	private GameGui gameGui;
 
-	public MouseProcess(Scene scene, Camera camera, Game game) {
+	public MouseProcess(Scene scene, Camera camera, Game game, GameGui gameGui) {
 		this.scene = scene;
 		this.camera = camera;
 		this.game = game;
+		this.gameGui = gameGui;
 		Mesh placeMesh = PrimitiveFactory.createPlane(14f, 3);
 		place = scene.add(placeMesh);
+		place.setVisible(false);
 		place.setName("place for creatures");
 		place.getPosition().setTranslation(0, 0, -2.8f);
 		endTurnButton = scene.add(ResourceController.getOrCreate().getOrLoadMesh(new MultiMesh(), "cube.smd"));
@@ -79,6 +83,7 @@ public class MouseProcess {
 			GuiCard.all(c -> c.setVisible(false));
 			place.setVisible(true);
 		case PLAY_SPELL_WITH_TARGET:
+		case SELECT_TARGET_FOR_ATACK:
 			selected.setVisible(false);
 			underCursor = scene.getObject(x, y, camera);
 			GuiCard.all(c -> c.setVisible(true));
@@ -86,7 +91,7 @@ public class MouseProcess {
 		case PLAY_SPELL_WITHOUT_TARGET:
 			Vector3f pos = new Vector3f();
 			pos.x = ((float) x / Display.getWidth() - 0.5f) * 14;
-			pos.y = 0;
+			pos.y = -0.1f;
 			pos.z = ((float) y / Display.getHeight() - 0.5f) * 10;
 			((GuiCard) selected).startMoving(pos, pos);
 			break;
@@ -121,14 +126,32 @@ public class MouseProcess {
 					case PLAY_SPELL_WITH_TARGET:
 						playSpellWithTarget();
 						break;
+					case SELECT_TARGET_FOR_ATACK:
+						atackTarget();
+						break;
 					default:
+						state = State.WAIT;
 						break;
 					}
 					selected = null;
 				}
 			}
 		}
-		Display.setTitle(Objects.toString(underCursor));
+		//Display.setTitle(Objects.toString(underCursor));
+	}
+
+	private void atackTarget() {
+		state = State.WAIT;
+		selected.startMoving(basePos);
+		if(underCursor instanceof GuiCard) {
+			CreatureCard card = (CreatureCard) selected.getCard();
+			Card target = ((GuiCard)underCursor).getCard();
+			if(card.canAtack(target)) {
+				new Thread(() -> 
+					card.getGame().battle(card, (CreatureCard)target)
+					).start();
+			}
+		}
 	}
 
 	private void playSpellWithTarget() {
@@ -184,31 +207,46 @@ public class MouseProcess {
 		}
 	}
 
-	private void play() {
-		
-	}
-
 	private void playOrAtack() {
 		if(underCursor instanceof GuiCard) {
 			GuiCard guiCard = (GuiCard) underCursor;
 			Card card = guiCard.getCard();
-			if(player.canPlay(card)) {
-				selected = guiCard;
-				basePos = selected.getPosition().getTranslation();
-				if(card instanceof SpellCard) {
-					if(card.needTarget())
-						state = State.PLAY_SPELL_WITH_TARGET;
-					else 
-						state = State.PLAY_SPELL_WITHOUT_TARGET;
-				} else {
-					state = State.PLAY_CREATURE;
-				}
+			if (player.getHand().contains(card)) {
+				playCard(guiCard, card);
 			}
-			if(player.canAtack(guiCard.getCard())) {
-				selected =  guiCard;
-				state = State.SELECT_TARGET_FOR_ATACK;
+			if (player.getCreatures().contains(card)) {
+				atack(guiCard, card);
 			}
 		}
+	}
+
+	private void atack(GuiCard guiCard, Card card) {
+		if(player.canAtack(guiCard.getCard())) {
+			selected =  guiCard;
+			basePos = selected.getPosition().getTranslation();
+			state = State.SELECT_TARGET_FOR_ATACK;
+		} else {
+			if(guiCard.getCard().getModifiers().stream().anyMatch(m -> m instanceof SummonSick)) {
+				gameGui.setMessage(GameGui.SUMMON_SICK);
+			} else {
+				gameGui.setMessage(GameGui.CANT_ATACK);
+			}
+		}	
+	}
+
+	private void playCard(GuiCard guiCard, Card card) {
+		if(player.canPlay(card)) {
+			selected = guiCard;
+			basePos = selected.getPosition().getTranslation();
+			if(card instanceof SpellCard) {
+				if(card.needTarget())
+					state = State.PLAY_SPELL_WITH_TARGET;
+				else 
+					state = State.PLAY_SPELL_WITHOUT_TARGET;
+			} else {
+				state = State.PLAY_CREATURE;
+			}
+		}  
 	}
 
 	private void nextTurn() {

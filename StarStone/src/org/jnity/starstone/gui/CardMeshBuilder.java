@@ -13,7 +13,7 @@ public class CardMeshBuilder {
 		float hShift = -0.7f;
 		float tw = (1-(2.5f - width)/2.5f)/2;
 		float th = (1-(3.5f - heigth)/3.5f)/2;
-		float thShift = -hShift*heigth/3.5f;
+		float thShift = 0.25f;
 		result.add(new Vector3f(-width / 2, 0, -heigth / 2-hShift), new Vector3f(0, 1, 0), null, new Vector2f(tw, 1-th-thShift));
 		result.add(new Vector3f(width / 2, 0, -heigth / 2-hShift), new Vector3f(0, 1, 0), null, new Vector2f(1-tw, 1-th-thShift));
 		result.add(new Vector3f(width / 2, 0, heigth / 2-hShift), new Vector3f(0, 1, 0), null, new Vector2f(1-tw, th-thShift));

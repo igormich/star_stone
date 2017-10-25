@@ -16,3 +16,5 @@ SHILD_BATTERY_ABOUT=?
 RECHARGE_SHIELDS=Перезарядка щитов
 RECHARGE_SHIELDS_DESK=Даёт существу плазменный щит
 RECHARGE_SHIELDS_ABOUT=?Что бы у любви не садилась батарейка?
+SUMMON_SICK=Это существо сможет атаковать на следующий ход
+CANT_ATACK=Это существо не может атаковать

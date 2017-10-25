@@ -43,4 +43,11 @@ public interface Modifier {
 	default int modifyMaxVespenGase(int value, Player player) {
 		return value;
 	}
+
+	default boolean modifyCanAtack(boolean value, CreatureCard creatureCard) {
+		return value;
+	}
+	default boolean canBeDuplicated() {
+		return true;
+	}
 }

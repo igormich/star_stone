@@ -107,4 +107,11 @@ public class Card extends ModifierContainer implements Cloneable, Serializable{
 	public boolean isValidTarget(Card target) {
 		return true;	
 	}
+
+	public boolean canAtack(Card target) {
+		return !target.getOwner().equals(this.getOwner())
+				&& target instanceof CreatureCard
+				&& target.getOwner().getCreatures().contains(target)
+				&& this.getOwner().getCreatures().contains(this);
+	}
 }

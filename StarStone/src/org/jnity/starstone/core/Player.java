@@ -145,7 +145,7 @@ public class Player extends CreatureCard implements GameListener{
 				(card instanceof SpellCard || creatures.size() < MAX_CREATURE_COUNT) ;
 	}
 	public boolean canAtack(Card card) {
-		return false;//TODO:
+		return creatures.contains(card) && ((CreatureCard) card).canAtack();//TODO:
 	}
 	
 }

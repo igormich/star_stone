@@ -10,7 +10,7 @@ import org.jnity.starstone.cards.CreatureCard;
 import org.jnity.starstone.gui.shaders.CardShader;
 import org.jnity.starstone.gui.shaders.CreatureShader;
 import org.jnity.starstone.gui.shaders.SimpleVertexShader;
-import org.jnity.starstone.protoss.PlasmaShield;
+import org.jnity.starstone.modifiers.PlasmaShield;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
@@ -47,9 +47,9 @@ public class GuiCard extends Object3d{
 		cardShader.addTexture(numbers, "numbersTex");
 		creatureShader.addTexture(numbers, "numbersTex");
 		cardShader.setBlendMode(SimpleMaterial.ALPHATEST50);
-		cardShader.setzWrite(false);
+		//cardShader.setzWrite(false);
 		creatureShader.setBlendMode(SimpleMaterial.ALPHATEST50);
-		creatureShader.setzWrite(false);
+		//creatureShader.setzWrite(false);
 		materialLibrary.addMaterial("cardShader", cardShader);
 		materialLibrary.addMaterial("creatureShader", creatureShader);
 	}
@@ -97,12 +97,12 @@ public class GuiCard extends Object3d{
 					cardShader.setUniform(new Vector4f(card.getPriceInMineral(), card.getPriceInGas(), 0, 0), "stats");
 				}
 				}
-				if(card.getOwner().getCreatures().contains(card)) {
-					creatureMesh.render(renderContex, owner);
-				} else {
+				//if(card.getOwner().getCreatures().contains(card)) {
+				//	creatureMesh.render(renderContex, owner);
+				//} else {
 					cardMesh.render(renderContex, owner);
-				}
-				creatureMesh.render(renderContex, owner);//remove
+				//}
+				//creatureMesh.render(renderContex, owner);//remove
 			}
 			
 		});

@@ -9,6 +9,7 @@ import org.jnity.starstone.cards.Card;
 import org.jnity.starstone.cards.CreatureCard;
 import org.jnity.starstone.events.GameEvent;
 import org.jnity.starstone.events.GameListener;
+import org.jnity.starstone.modifiers.ÑombatFatigue;
 
 public class Game {
 	private final ArrayList<GameListener> listeners = new ArrayList<>();
@@ -80,6 +81,16 @@ public class Game {
 
 	public int getTurnNumber() {
 		return turnNumber.get();
+	}
+
+	public void battle(CreatureCard card, CreatureCard target) {
+		int atackerPower = card.getPower();
+		int defenderPower = target.getPower();
+		emit(GameEvent.ATACKS, card, target);
+		emit(GameEvent.DEFENDED, target, card);
+		card.takeDamage(defenderPower);
+		target.takeDamage(atackerPower);
+		card.addModifier(new ÑombatFatigue(card));
 	}
 
 }

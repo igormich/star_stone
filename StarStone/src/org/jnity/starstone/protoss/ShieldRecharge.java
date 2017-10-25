@@ -3,6 +3,7 @@ package org.jnity.starstone.protoss;
 import org.jnity.starstone.cards.Card;
 import org.jnity.starstone.cards.CreatureCard;
 import org.jnity.starstone.cards.SpellCard;
+import org.jnity.starstone.modifiers.PlasmaShield;
 
 public class ShieldRecharge extends SpellCard {
 

@@ -7,6 +7,7 @@ import org.jnity.starstone.cards.CreatureCard;
 import org.jnity.starstone.core.Debug;
 import org.jnity.starstone.events.GameEvent;
 import org.jnity.starstone.events.GameListener;
+import org.jnity.starstone.modifiers.PlasmaShield;
 
 public class ShildBattery extends CreatureCard implements GameListener {
 
