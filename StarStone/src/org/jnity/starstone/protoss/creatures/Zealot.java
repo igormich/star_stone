@@ -1,4 +1,4 @@
-package org.jnity.starstone.protoss;
+package org.jnity.starstone.protoss.creatures;
 
 import org.jnity.starstone.cards.CreatureCard;
 

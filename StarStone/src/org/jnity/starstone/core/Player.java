@@ -9,7 +9,7 @@ import org.jnity.starstone.cards.CreatureCard;
 import org.jnity.starstone.cards.SpellCard;
 import org.jnity.starstone.events.GameEvent;
 import org.jnity.starstone.events.GameListener;
-import org.jnity.starstone.modifier.Modifier;
+import org.jnity.starstone.modifiers.Modifier;
 
 public class Player extends CreatureCard implements GameListener{
 
@@ -31,6 +31,7 @@ public class Player extends CreatureCard implements GameListener{
 	private int currentMinerals;
 	private int maxVespenGase = 0;
 	private int currentVespenGase;
+	private int playedCardCount;
 	
 	public int getMaxMinerals() {
 		int result = maxMinerals;
@@ -91,6 +92,7 @@ public class Player extends CreatureCard implements GameListener{
 			putCreature(card, position);
 		}
 		card.play(target);
+		playedCardCount++;
 	}
 
 	public void putCreature(Card card, int position) {
@@ -122,6 +124,7 @@ public class Player extends CreatureCard implements GameListener{
 		if(GameEvent.NEW_TURN == gameEvent && card.equals(this)) {
 			maxMinerals++;
 			currentMinerals = maxMinerals;
+			playedCardCount = 0;
 		}
 	}
 	public int getCurrentMinerals() {
@@ -146,6 +149,14 @@ public class Player extends CreatureCard implements GameListener{
 	}
 	public boolean canAtack(Card card) {
 		return creatures.contains(card) && ((CreatureCard) card).canAtack();//TODO:
+	}
+	public int getCountPlayedCard() {
+		return playedCardCount;
+	}
+	public void putInHand(CreatureCard card) {
+		if(hand.size() < MAX_HAND_SIZE) {
+			hand.add(card);
+		}
 	}
 	
 }

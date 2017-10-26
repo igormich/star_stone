@@ -10,7 +10,7 @@ import org.jnity.starstone.core.ModifierContainer;
 import org.jnity.starstone.core.Player;
 import org.jnity.starstone.core.TextHolder;
 import org.jnity.starstone.events.GameEvent;
-import org.jnity.starstone.modifier.Modifier;
+import org.jnity.starstone.modifiers.Modifier;
 
 public class Card extends ModifierContainer implements Cloneable, Serializable{
 	/**

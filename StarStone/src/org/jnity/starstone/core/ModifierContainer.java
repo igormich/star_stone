@@ -3,7 +3,7 @@ package org.jnity.starstone.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jnity.starstone.modifier.Modifier;
+import org.jnity.starstone.modifiers.Modifier;
 
 public class ModifierContainer extends GamePart {
 	private final ArrayList<Modifier> modifiers = new ArrayList<>();

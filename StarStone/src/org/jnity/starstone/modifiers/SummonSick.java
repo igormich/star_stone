@@ -4,7 +4,6 @@ import org.jnity.starstone.cards.Card;
 import org.jnity.starstone.cards.CreatureCard;
 import org.jnity.starstone.events.GameEvent;
 import org.jnity.starstone.events.GameListener;
-import org.jnity.starstone.modifier.CreatureModifier;
 
 public class SummonSick extends CreatureModifier implements GameListener {
 

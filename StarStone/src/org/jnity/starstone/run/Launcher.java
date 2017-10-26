@@ -8,6 +8,9 @@ import org.jnity.starstone.cards.*;
 import org.jnity.starstone.core.*;
 import org.jnity.starstone.gui.GameGui;
 import org.jnity.starstone.protoss.*;
+import org.jnity.starstone.protoss.creatures.ShieldRecharge;
+import org.jnity.starstone.protoss.creatures.ShildBattery;
+import org.jnity.starstone.protoss.creatures.Zealot;
 
 public class Launcher {
 	public static void main(String[] args) throws IOException {

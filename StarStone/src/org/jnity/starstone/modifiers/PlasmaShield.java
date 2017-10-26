@@ -1,7 +1,6 @@
 package org.jnity.starstone.modifiers;
 
 import org.jnity.starstone.cards.CreatureCard;
-import org.jnity.starstone.modifier.CreatureModifier;
 
 public class PlasmaShield extends CreatureModifier  {
 

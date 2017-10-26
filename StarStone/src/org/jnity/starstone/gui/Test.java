@@ -8,8 +8,8 @@ import org.jnity.starstone.cards.Card;
 import org.jnity.starstone.core.Game;
 import org.jnity.starstone.core.Player;
 import org.jnity.starstone.core.TextHolder;
-import org.jnity.starstone.protoss.ShildBattery;
-import org.jnity.starstone.protoss.Zealot;
+import org.jnity.starstone.protoss.creatures.ShildBattery;
+import org.jnity.starstone.protoss.creatures.Zealot;
 
 public class Test {
 

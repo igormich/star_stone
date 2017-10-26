@@ -1,4 +1,4 @@
-package org.jnity.starstone.modifier;
+package org.jnity.starstone.modifiers;
 
 import org.jnity.starstone.cards.CreatureCard;
 

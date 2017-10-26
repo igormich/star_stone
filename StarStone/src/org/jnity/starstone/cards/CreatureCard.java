@@ -1,7 +1,7 @@
 package org.jnity.starstone.cards;
 
 import org.jnity.starstone.events.GameEvent;
-import org.jnity.starstone.modifier.Modifier;
+import org.jnity.starstone.modifiers.Modifier;
 import org.jnity.starstone.modifiers.SummonSick;
 
 public class CreatureCard extends Card {
