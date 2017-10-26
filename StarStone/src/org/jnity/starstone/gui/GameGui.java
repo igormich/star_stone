@@ -46,6 +46,7 @@ public class GameGui extends Thread implements GameListener {
 
 	public static final String SUMMON_SICK = "SUMMON_SICK";
 	public static final String CANT_ATACK = "CANT_ATACK";
+	public static final String NEED_MORE_RESOURSES = "NEED_MORE_RESOURSES";
 	private final ConcurrentLinkedQueue<StoredEvent> events = new ConcurrentLinkedQueue<>();
 	private Game game;
 	private Player our_player;

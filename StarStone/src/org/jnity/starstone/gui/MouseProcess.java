@@ -246,7 +246,10 @@ public class MouseProcess {
 			} else {
 				state = State.PLAY_CREATURE;
 			}
-		}  
+		} else {
+			gameGui.setMessage(GameGui.NEED_MORE_RESOURSES);
+		}
+		
 	}
 
 	private void nextTurn() {

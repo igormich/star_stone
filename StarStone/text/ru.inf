@@ -5,16 +5,29 @@ ZERLING=Зерлинг
 ZERLING_DESK=Боевой крик, призывает второго зерлинга
 ZERLING_ABOUT=Два по цене одного
 ZEALOT=Зилот
-ZEALOT_DESK
-ZEALOT_ABOUT=?Фанатик
-MOBILIZATION=Мобилизация
-MOBILIZATION_DESK=Призывает двух морпехов
-MOBILIZATION_ABOUT=Это вам не фей-парад
+ZEALOT_DESK=Плазменный щит
+ZEALOT_ABOUT="Жизнь за Айур!"
 SHILD_BATTERY=Батарея щитов
 SHILD_BATTERY_DESK=В конце хода даёт существам справа и слева плазменный щит
 SHILD_BATTERY_ABOUT=?
 RECHARGE_SHIELDS=Перезарядка щитов
 RECHARGE_SHIELDS_DESK=Даёт существу плазменный щит
 RECHARGE_SHIELDS_ABOUT=?Что бы у любви не садилась батарейка?
+
+CENTURION=Центурион
+CENTURION_DESK=Невидимость
+CENTURION_ABOUT="Я щит сумерек!"
+DARKSTALKER=Сталкер
+DARKSTALKER_DESK=
+DARKSTALKER_ABOUT=«Я здесь, в тени».
+
+
+MOBILIZATION=Мобилизация
+MOBILIZATION_DESK=Призывает двух морпехов
+MOBILIZATION_ABOUT=Это вам не фей-парад
+
+
+
 SUMMON_SICK=Это существо сможет атаковать на следующий ход
 CANT_ATACK=Это существо не может атаковать
+NEED_MORE_RESOURSES=Недостаточно ресурсов

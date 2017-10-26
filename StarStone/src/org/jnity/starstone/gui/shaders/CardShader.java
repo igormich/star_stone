@@ -33,7 +33,7 @@ public class CardShader extends JFragmentShader {
 
 	@Override
 	public void main() {
-		Vec4 f_color = texture2D(faceTex, sub(mul(texCoord.st, vec2(2f, 2f)), vec2(0.5f, 0.05f)));
+		Vec4 f_color = texture2D(faceTex, sub(mul(texCoord.st, vec2(1f, 2f)), vec2(0.0f, 0.05f)));
 		Vec4 b_color = texture2D(backTex, texCoord.st);
 		
 		float faceMask = clamp(b_color.a * 1 - 100 * b_color.r, 0f, 1f);

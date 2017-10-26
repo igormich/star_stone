@@ -16,12 +16,14 @@ public class CreatureShader extends JFragmentShader {
 	Sampler2D faceTex;
 	@Uniform
 	Sampler2D numbersTex;
-
+	@Uniform
+	Sampler2D shadowTex;
+	
 	@Uniform
 	Vec4 stats;
 	
 	@Uniform
-	Vec4 modifiers;
+	Vec4 modifiers;//x-shild,y-shadow
 	
 	@Varying
 	Vec4 screenPos;
@@ -39,7 +41,9 @@ public class CreatureShader extends JFragmentShader {
 		Vec4 f_color = texture2D(faceTex, sub(mul(texCoord.st, vec2(2f, 2f)), vec2(0.5f, 0.05f)));
 		Vec4 b_color = texture2D(backTex, texCoord.st);
 		
-		f_color = add(mul(f_color, 1-modifiers.x), (mul(f_color, vec4(modifiers.x,modifiers.x,0f,modifiers.x))));
+		f_color = add(mul(f_color, 1-modifiers.x), (mul(add(mul(f_color,0.8f),0.2f), vec4(modifiers.x,modifiers.x,0f,modifiers.x))));
+		f_color = add(mul(f_color, 1-modifiers.y), (mul(add(mul(f_color,0.8f),0.2f), vec4(modifiers.y,modifiers.y,0f,modifiers.y))));
+		
 		float faceMask = clamp(b_color.a * 1 - 100 * b_color.r, 0f, 1f);
 		Vec4 color = add(mul(f_color, faceMask), b_color);
 		
