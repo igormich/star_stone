@@ -1,6 +1,5 @@
 package org.jnity.starstone.gui;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.jnity.starstone.cards.CreatureCard;

@@ -9,6 +9,11 @@ public class Centurion extends CreatureCard {
 
     public Centurion() {
         super("CENTURION", 1, 0, 1, 2);
+        
+    }
+    @Override
+    public void play(CreatureCard target) {
+        super.play(target);
         addModifier(new Invisibility(this));
     }
 }

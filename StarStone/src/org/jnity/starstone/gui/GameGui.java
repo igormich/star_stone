@@ -4,9 +4,6 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
-import java.nio.channels.SelectableChannel;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.imageio.ImageIO;
@@ -18,29 +15,14 @@ import org.jnity.starstone.core.Player;
 import org.jnity.starstone.core.TextHolder;
 import org.jnity.starstone.events.GameEvent;
 import org.jnity.starstone.events.GameListener;
-import org.jnity.starstone.gui.shaders.CardShader;
-import org.jnity.starstone.gui.shaders._CreatureShader;
-import org.jnity.starstone.protoss.creatures.ShieldRecharge;
-import org.jnity.starstone.protoss.creatures.ShildBattery;
-import org.jnity.starstone.protoss.creatures.Zealot;
-import org.jnity.starstone.gui.shaders.SimpleVertexShader;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 import base.Camera;
 import base.Object3d;
 import base.Scene;
-import io.ResourceController;
-import jglsl.base.ShaderProcessor;
-import materials.Shader;
-import materials.SimpleMaterial;
-import materials.Texture;
 import materials.Texture2D;
-import properties.Mesh;
-import properties.MultiMesh;
-import utils.PrimitiveFactory;
 
 public class GameGui extends Thread implements GameListener {
 

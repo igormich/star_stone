@@ -2,8 +2,6 @@ package org.jnity.starstone.zerg.creatures;
 
 import org.jnity.starstone.cards.CreatureCard;
 
-import java.util.List;
-
 public class Ultralisk extends CreatureCard {
 
     private static final long serialVersionUID = -2809682915424808307L;

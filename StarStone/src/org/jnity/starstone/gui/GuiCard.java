@@ -10,6 +10,7 @@ import org.jnity.starstone.cards.CreatureCard;
 import org.jnity.starstone.gui.shaders.CardShader;
 import org.jnity.starstone.gui.shaders.CreatureShader;
 import org.jnity.starstone.gui.shaders.SimpleVertexShader;
+import org.jnity.starstone.modifiers.Invisibility;
 import org.jnity.starstone.modifiers.PlasmaShield;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
@@ -46,10 +47,17 @@ public class GuiCard extends Object3d{
 		Texture numbers = new Texture2D("numbers.png");
 		cardShader.addTexture(numbers, "numbersTex");
 		creatureShader.addTexture(numbers, "numbersTex");
+		
+		
 		cardShader.setBlendMode(SimpleMaterial.ALPHATEST50);
 		//cardShader.setzWrite(false);
 		creatureShader.setBlendMode(SimpleMaterial.ALPHATEST50);
 		//creatureShader.setzWrite(false);
+		
+		Texture shadow = new Texture2D("eff_shadow.jpg");
+		Texture shield = new Texture2D("eff_shield.jpg");
+		creatureShader.addTexture(shadow, "shadowTex");
+		creatureShader.addTexture(shield, "shieldTex");
 		materialLibrary.addMaterial("cardShader", cardShader);
 		materialLibrary.addMaterial("creatureShader", creatureShader);
 	}
@@ -90,7 +98,10 @@ public class GuiCard extends Object3d{
 					Vector4f modifiers = new Vector4f();
 					if (card.getModifiers().stream().anyMatch(m -> m.getClass().equals(PlasmaShield.class)))
 						modifiers.x = 1;
+					if (card.getModifiers().stream().anyMatch(m -> m.getClass().equals(Invisibility.class)))
+						modifiers.y = 1;
 					creatureShader.setUniform(modifiers, "modifiers");
+					creatureShader.setUniform(renderContex.getTime(), "time");
 				} else {
 					cardMesh.setMaterialName("cardShader");
 					cardShader.addTexture(faceTex, "faceTex");

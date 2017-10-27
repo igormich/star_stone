@@ -5,8 +5,8 @@ import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 
 import org.jnity.starstone.gui.shaders.CardShader;
-import org.jnity.starstone.gui.shaders._CreatureShader;
 import org.jnity.starstone.gui.shaders.SimpleVertexShader;
+import org.jnity.starstone.gui.shaders._CreatureShader;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;

@@ -1,12 +1,12 @@
 package org.jnity.starstone.nerazim.spells;
 
+import java.util.List;
+
 import org.jnity.starstone.cards.CreatureCard;
 import org.jnity.starstone.cards.SpellCard;
-import org.jnity.starstone.modifiers.TurnAttackBuff;
 import org.jnity.starstone.modifiers.Invisibility;
 import org.jnity.starstone.modifiers.Modifier;
-
-import java.util.List;
+import org.jnity.starstone.modifiers.TurnAttackBuff;
 
 public class ShadowDance extends SpellCard {
 
