@@ -5,9 +5,9 @@ import org.jnity.starstone.cards.CreatureCard;
 import org.jnity.starstone.events.GameEvent;
 import org.jnity.starstone.events.GameListener;
 
-public class ÑombatFatigue extends CreatureModifier implements GameListener {
+public class CombatFatigue extends CreatureModifier implements GameListener {
 
-	public ÑombatFatigue(CreatureCard target) {
+	public CombatFatigue(CreatureCard target) {
 		super(target);
 		target.getGame().addListener(this);
 	}

@@ -9,7 +9,7 @@ import org.jnity.starstone.cards.Card;
 import org.jnity.starstone.cards.CreatureCard;
 import org.jnity.starstone.events.GameEvent;
 import org.jnity.starstone.events.GameListener;
-import org.jnity.starstone.modifiers.ÑombatFatigue;
+import org.jnity.starstone.modifiers.CombatFatigue;
 
 public class Game {
 	private final ArrayList<GameListener> listeners = new ArrayList<>();
@@ -39,16 +39,21 @@ public class Game {
 		return activePlayer;
 	}
 
+	
 	public void emit(GameEvent gameEvent, Card card, CreatureCard target) {
 		Debug.print(card + " " + gameEvent + " " + target);
-		for (GameListener gameListener : (ArrayList<GameListener>)listeners.clone()) {
+		@SuppressWarnings("unchecked")
+		ArrayList<GameListener> listeners = (ArrayList<GameListener>)this.listeners.clone();
+		for (GameListener gameListener : listeners) {
 			gameListener.on(gameEvent, card, target);
 		}
 	}
 
 	public void emit(GameEvent gameEvent, Card card) {
 		Debug.print(gameEvent + " " + card);
-		for (GameListener gameListener :  (ArrayList<GameListener>)listeners.clone()) {
+		@SuppressWarnings("unchecked")
+		ArrayList<GameListener> listeners = (ArrayList<GameListener>)this.listeners.clone();
+		for (GameListener gameListener :  listeners) {
 			gameListener.on(gameEvent, card);
 		}
 	}
@@ -90,7 +95,7 @@ public class Game {
 		emit(GameEvent.DEFENDED, target, card);
 		card.takeDamage(defenderPower);
 		target.takeDamage(atackerPower);
-		card.addModifier(new ÑombatFatigue(card));
+		card.addModifier(new CombatFatigue(card));
 	}
 
 }

@@ -8,7 +8,7 @@ import jglsl.base.Vec2;
 import jglsl.base.Vec3;
 import jglsl.base.Vec4;
 
-public class CreatureShader extends JFragmentShader {
+public class CompactCreatureShader extends JFragmentShader {
 
 	@Uniform
 	Sampler2D backTex;
@@ -17,8 +17,14 @@ public class CreatureShader extends JFragmentShader {
 	@Uniform
 	Sampler2D numbersTex;
 	@Uniform
-	Vec4 stats;
+	Sampler2D shadowTex;
+	@Uniform
+	Sampler2D shieldTex;
+	@Uniform
+	Vec4 stats;//no cost
 	
+	@Uniform
+	Vec4 modifiers;//x-shild,y-shadow
 	@Uniform
 	float time;
 	
@@ -37,24 +43,21 @@ public class CreatureShader extends JFragmentShader {
 	public void main() {
 		Vec4 f_color = texture2D(faceTex, sub(mul(texCoord.st, vec2(2f, 2f)), vec2(0.5f, 0.05f)));
 		Vec4 b_color = texture2D(backTex, texCoord.st);
+		Vec4 shadow_color = texture2D(shadowTex, add(texCoord.st, -time/100));
+		Vec4 shield_color = texture2D(shieldTex, add(texCoord.st, -time/100));
+		f_color = add(mul(f_color, 1-modifiers.x), (mul(add(mul(f_color,0.8f),0.2f), mul(shield_color,modifiers.x))));
+		f_color = add(mul(f_color, 1-modifiers.y), (mul(add(mul(f_color,0.8f),0.2f), mul(shadow_color,modifiers.y))));
 		float faceMask = clamp(b_color.a * 1 - 100 * b_color.r, 0f, 1f);
 		Vec4 color = add(mul(f_color, faceMask), b_color);
 		
-		float numberScale = 5f; 
-		//cost
+		float numberScale = 6f; 
+
 		Vec2 costText = mul(texCoord.st,numberScale);
 		Vec4 number = vec4(0f, 0f, 0f, 0f);
-		costText.x-=0.3f;
-		if(max(costText.x,costText.y)<1 && min(costText.x,costText.y)>0) { // better without if
-			costText.y+=stats.x;
-			number = texture2D(numbersTex, mul(costText, vec2(1f,0.1f)));
-		}
-		color = add(mul(color, 1-number.a), number);
-		
 		//power
 		costText = mul(texCoord.st, numberScale);
-		costText.x-=0.2f;
-		costText.y-=numberScale-1-0.1f;
+		costText.x-=1.3f;
+		costText.y-=numberScale-1-2.5f;
 		number = vec4(0f, 0f, 0f, 0f);
 		if(max(costText.x,costText.y)<1 && min(costText.x,costText.y)>0) { // better without if
 			costText.x-=0.1f;
@@ -65,8 +68,8 @@ public class CreatureShader extends JFragmentShader {
 		
 		//hits
 		costText = mul(texCoord.st, numberScale);
-		costText.x-=numberScale-1-0.15f;
-		costText.y-=numberScale-1-0.1f;
+		costText.x-=numberScale-1-1.3f;
+		costText.y-=numberScale-1-2.6f;
 		number = vec4(0f, 0f, 0f, 0f);
 		if(max(costText.x,costText.y)<1 && min(costText.x,costText.y)>0) { // better without if
 			costText.y+=stats.w-0.1f;

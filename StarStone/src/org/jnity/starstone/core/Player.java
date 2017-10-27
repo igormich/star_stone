@@ -46,14 +46,17 @@ public class Player extends CreatureCard implements GameListener{
 		return result;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<CreatureCard> getCreatures() {
 		return (List<CreatureCard>) creatures.clone();
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Card> getHand() {
 		return (List<Card>) hand.clone();
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Card> getDeck() {
 		return (List<Card>) deck.clone();
 	}

@@ -7,6 +7,7 @@ import org.jnity.starstone.cards.CreatureCard;
 import org.jnity.starstone.cards.SpellCard;
 import org.jnity.starstone.core.Game;
 import org.jnity.starstone.core.Player;
+import org.jnity.starstone.modifiers.CombatFatigue;
 import org.jnity.starstone.modifiers.SummonSick;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -40,6 +41,8 @@ public class MouseProcess {
 	private Object3d place;
 	private State state = State.WAIT;
 	private GameGui gameGui;
+	private int placePosition;
+	private CreatureCard creatureWithTarget;
 
 	public MouseProcess(Scene scene, Camera camera, Game game, GameGui gameGui) {
 		this.scene = scene;
@@ -68,7 +71,6 @@ public class MouseProcess {
 			break;
 		case PLAY_CREATURE:
 			int i = 0;
-			boolean skip = false;
 			List<CreatureCard> creatures = player.getCreatures();
 			for(CreatureCard creature: creatures) {
 				GuiCard guiCard = GuiCard.get(creature);
@@ -84,14 +86,18 @@ public class MouseProcess {
 		case PLAY_SPELL_WITH_TARGET:
 		case SELECT_TARGET_FOR_ATACK:
 			selected.setVisible(false);
+		case SELECT_TARGET_FOR_BATLECRY:
 			underCursor = scene.getObject(x, y, camera);
 			GuiCard.all(c -> c.setVisible(true));
 			place.setVisible(false);
 		case PLAY_SPELL_WITHOUT_TARGET:
+			if(selected == null)
+				break;
 			Vector3f pos = new Vector3f();
 			pos.x = ((float) x / Display.getWidth() - 0.5f) * 14;
 			pos.y = -0.1f;
 			pos.z = ((float) y / Display.getHeight() - 0.5f) * 10;
+			
 			((GuiCard) selected).startMoving(pos, pos);
 			break;
 		default:
@@ -109,6 +115,7 @@ public class MouseProcess {
 						playOrAtack();
 						break;
 					case SELECT_TARGET_FOR_BATLECRY:
+						playCreatureWithTarget();
 						break;
 					default:
 						break;
@@ -137,6 +144,30 @@ public class MouseProcess {
 			}
 		}
 		//Display.setTitle(Objects.toString(underCursor));
+	}
+
+	private void playCreatureWithTarget() {
+		state = State.WAIT;
+		if (underCursor instanceof GuiCard) {
+			Card card = ((GuiCard) underCursor).getCard();
+			if (card instanceof CreatureCard) {
+				CreatureCard target = (CreatureCard) card;
+				if (creatureWithTarget.isValidTarget(target)) {
+					new Thread(() -> player.play(creatureWithTarget, target, placePosition)).start();
+					return;
+				}
+			}
+		}
+		selected.startMoving(basePos);
+		int i = 0;
+		List<CreatureCard> creatures = player.getCreatures();
+		for (CreatureCard creature : creatures) {
+			GuiCard guiCard = GuiCard.get(creature);
+			float x = -creatures.size() / 2 + i;
+			guiCard.startMoving(new Vector3f(2 * x, 0, -3));
+			i++;
+		}
+
 	}
 
 	private void atackTarget() {
@@ -184,15 +215,20 @@ public class MouseProcess {
 		state = State.WAIT;
 		if (place.equals(underCursor)) {
 			List<CreatureCard> creatures = player.getCreatures();
-			int place = 0;
+			int p = 0;
 			for(CreatureCard creatureCard: creatures) {
 				if(GuiCard .get(creatureCard).getPosition().getTranslation().x > selected.getPosition().getTranslation().x)
 					break;
-				place++;
+				p++;
 			}
-			int p = place;
-			Card card = selected.getCard();
-			new Thread(() -> player.play(card, null, p)).start();
+			placePosition = p;
+			CreatureCard card = (CreatureCard) selected.getCard();
+			creatureWithTarget = card;
+			if (card.needTarget()) {
+				state = State.SELECT_TARGET_FOR_BATLECRY;
+			} else {
+				new Thread(() -> player.play(card, null, placePosition)).start();
+			}
 		} else {
 			selected.startMoving(basePos);
 			int i = 0;
@@ -227,6 +263,8 @@ public class MouseProcess {
 		} else {
 			if(guiCard.getCard().getModifiers().stream().anyMatch(m -> m instanceof SummonSick)) {
 				gameGui.setMessage(GameGui.SUMMON_SICK);
+			} else if(guiCard.getCard().getModifiers().stream().anyMatch(m -> m instanceof CombatFatigue)) {
+				gameGui.setMessage(GameGui.AFTER_ATACK);
 			} else {
 				gameGui.setMessage(GameGui.CANT_ATACK);
 			}

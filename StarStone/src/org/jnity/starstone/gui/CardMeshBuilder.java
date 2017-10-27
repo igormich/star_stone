@@ -8,19 +8,18 @@ import properties.Mesh;
 public class CardMeshBuilder {
 	public static Mesh createCreatureMesh() {
 		Mesh result = new Mesh();
-		float width = 1.5f;
-		float heigth = 2f;
-		float hShift = -0.7f;
-		float tw = (1-(2.5f - width)/2.5f)/2;
-		float th = (1-(3.5f - heigth)/3.5f)/2;
-		float thShift = 0.25f;
-		result.add(new Vector3f(-width / 2, 0, -heigth / 2-hShift), new Vector3f(0, 1, 0), null, new Vector2f(tw, 1-th-thShift));
-		result.add(new Vector3f(width / 2, 0, -heigth / 2-hShift), new Vector3f(0, 1, 0), null, new Vector2f(1-tw, 1-th-thShift));
-		result.add(new Vector3f(width / 2, 0, heigth / 2-hShift), new Vector3f(0, 1, 0), null, new Vector2f(1-tw, th-thShift));
+		float width = 1.7f;
+		float heigth = 2.5f;
+		float hShift = -0.5f;
+		float tw=0.8f/(2*2.5f);
+		float th=1/(2*3.5f);
+		result.add(new Vector3f(-width / 2, 0, -heigth / 2-hShift), new Vector3f(0, 1, 0), null, new Vector2f(tw, 1 - th*2));
+		result.add(new Vector3f(width / 2, 0, -heigth / 2-hShift), new Vector3f(0, 1, 0), null, new Vector2f(1-tw, 1- th*2));
+		result.add(new Vector3f(width / 2, 0, heigth / 2-hShift), new Vector3f(0, 1, 0), null, new Vector2f(1-tw, 0));
 
-		result.add(new Vector3f(width / 2, 0, heigth / 2 - hShift), new Vector3f(0, 1, 0), null, new Vector2f(1-tw, th-thShift));
-		result.add(new Vector3f(-width / 2, 0, heigth / 2 - hShift), new Vector3f(0, 1, 0), null, new Vector2f(tw, th-thShift));
-		result.add(new Vector3f(-width / 2, 0, -heigth / 2 - hShift), new Vector3f(0, 1, 0), null, new Vector2f(tw, 1-th-thShift));
+		result.add(new Vector3f(width / 2, 0, heigth / 2 - hShift), new Vector3f(0, 1, 0), null, new Vector2f(1-tw, 0));
+		result.add(new Vector3f(-width / 2, 0, heigth / 2 - hShift), new Vector3f(0, 1, 0), null, new Vector2f(tw, 0));
+		result.add(new Vector3f(-width / 2, 0, -heigth / 2 - hShift), new Vector3f(0, 1, 0), null, new Vector2f(tw, 1- th*2));
 
 		result.setRenderParts(Mesh.TEXTURE + Mesh.NORMAL);
 		return result;
