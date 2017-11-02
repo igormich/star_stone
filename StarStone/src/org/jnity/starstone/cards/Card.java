@@ -5,11 +5,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.List;
 
 import org.jnity.starstone.core.ModifierContainer;
 import org.jnity.starstone.core.Player;
 import org.jnity.starstone.core.TextHolder;
 import org.jnity.starstone.events.GameEvent;
+import org.jnity.starstone.modifiers.Defender;
+import org.jnity.starstone.modifiers.Invisibility;
+import org.jnity.starstone.modifiers.Invulnerability;
 import org.jnity.starstone.modifiers.Modifier;
 
 public class Card extends ModifierContainer implements Cloneable, Serializable{
@@ -105,13 +109,26 @@ public class Card extends ModifierContainer implements Cloneable, Serializable{
 	}
 
 	public boolean isValidTarget(Card target) {
-		return true;	
+		List<Modifier> modifiers = target.getModifiers();
+		for (Object modifier : modifiers) {
+			if (modifier instanceof Invisibility || modifier instanceof Invulnerability)
+				return false;
+		}
+		return true;
 	}
 
-	public boolean canAtack(Card target) {
+	public boolean canAtack(CreatureCard target) {
+		if (!target.hasModifier(Defender.class)){
+			if (target.getOwner().getCreatures().stream().anyMatch(c ->c.hasModifier(Defender.class) && !c.hasModifier(Defender.class))) {
+				return false;
+			}
+		}
 		return !target.getOwner().equals(this.getOwner())
 				&& target instanceof CreatureCard
 				&& target.getOwner().getCreatures().contains(target)
-				&& this.getOwner().getCreatures().contains(this);
+				&& this.getOwner().getCreatures().contains(this)
+				&& isValidTarget(target);
 	}
+
+
 }

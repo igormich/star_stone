@@ -21,4 +21,9 @@ public class ModifierContainer extends GamePart {
 	public void removeModifier(Modifier modifier) {
 		modifiers.remove(modifier);
 	}
+	
+	public boolean hasModifier(Class<? extends Modifier> modifierType) {
+		return getModifiers().stream().anyMatch(m -> m.getClass() == modifierType);
+	}
+	
 }

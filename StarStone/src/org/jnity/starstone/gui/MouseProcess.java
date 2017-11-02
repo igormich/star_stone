@@ -8,6 +8,9 @@ import org.jnity.starstone.cards.SpellCard;
 import org.jnity.starstone.core.Game;
 import org.jnity.starstone.core.Player;
 import org.jnity.starstone.modifiers.CombatFatigue;
+import org.jnity.starstone.modifiers.Invisibility;
+import org.jnity.starstone.modifiers.Invulnerability;
+import org.jnity.starstone.modifiers.Modifier;
 import org.jnity.starstone.modifiers.SummonSick;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -176,10 +179,13 @@ public class MouseProcess {
 		if(underCursor instanceof GuiCard) {
 			CreatureCard card = (CreatureCard) selected.getCard();
 			Card target = ((GuiCard)underCursor).getCard();
-			if(card.canAtack(target)) {
-				new Thread(() -> 
-					card.getGame().battle(card, (CreatureCard)target)
-					).start();
+			if(target instanceof CreatureCard) {
+				CreatureCard creatureTarget = (CreatureCard) target;
+				if(card.canAtack(creatureTarget)) {
+					new Thread(() -> 
+						card.getGame().battle(card, creatureTarget)
+						).start();
+				}
 			}
 		}
 	}
