@@ -8,6 +8,7 @@ import org.jnity.starstone.cards.Card;
 import org.jnity.starstone.core.Game;
 import org.jnity.starstone.core.Player;
 import org.jnity.starstone.core.TextHolder;
+import org.jnity.starstone.events.GameEvent;
 import org.jnity.starstone.gui.GameGui;
 import org.jnity.starstone.nerazim.creatures.Centurion;
 import org.jnity.starstone.nerazim.creatures.DarkStalker;
@@ -29,9 +30,12 @@ public class BotRunner {
 		deck1.add(new Zealot());
 	
 		Player p1 = new Player("Первый игрок", deck1);
+		p1.on(GameEvent.NEW_TURN,p1);
+		p1.on(GameEvent.NEW_TURN,p1);
+		p1.on(GameEvent.NEW_TURN,p1);
 		Player p2 = new Player("Второй второй", deck1);
 		Game game = new Game(p1, p2);
-		new GameGui(game);
+		new GameGui(game, p1);
 		game.nextTurn();
 	}
 }

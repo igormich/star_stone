@@ -1,5 +1,6 @@
 package org.jnity.starstone.nerazim.creatures;
 
+import org.jnity.starstone.cards.Card;
 import org.jnity.starstone.cards.CreatureCard;
 
 public class DarkStalker extends CreatureCard {
@@ -20,6 +21,11 @@ public class DarkStalker extends CreatureCard {
 	@Override
 	public boolean needTarget() {
 		return getOwner().getCountPlayedCard() > 0;
+	}
+
+	@Override
+	public boolean isValidTarget(Card target) {
+		return super.isValidTarget(target) && !target.getOwner().equals(this.getOwner());
 	}
 
 }

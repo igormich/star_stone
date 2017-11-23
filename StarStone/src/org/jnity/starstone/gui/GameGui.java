@@ -22,7 +22,12 @@ import org.lwjgl.util.vector.Vector3f;
 import base.Camera;
 import base.Object3d;
 import base.Scene;
+import materials.SimpleMaterial;
 import materials.Texture2D;
+import materials.TexturedMaterial;
+import primitives.Plane;
+import properties.Mesh;
+import utils.PrimitiveFactory;
 
 public class GameGui extends Thread implements GameListener {
 
@@ -37,7 +42,9 @@ public class GameGui extends Thread implements GameListener {
 	private MouseProcess mouseProcess;
 	private Animation animation;
 
-	public GameGui(Game game) throws IOException {
+	ResInfo resInfo;
+	public GameGui(Game game, Player our_player) throws IOException {
+		this.our_player = our_player;
 		this.game = game;
 		game.addListener(this);
 		start();
@@ -61,13 +68,17 @@ public class GameGui extends Thread implements GameListener {
 			Object3d cameraBox = new Object3d();
 			cameraBox.addChild(camera);
 			scene.add(cameraBox);
+			
+			ResInfo resInfo = new ResInfo(game, scene, our_player);
 
 			GuiCard.init(scene.getMaterialLibrary());
 			
 			camera.getPosition().move(0, -10, 0).roll(90).turn(90);
 			scene.setBackColor(new Vector3f(0.5f, 1, 0.5f));
 			long sysTime = 0;
+
 			mouseProcess = new MouseProcess(scene, camera, game, this);
+			mouseProcess.player = our_player;
 			while (!Display.isCloseRequested()) {
 				float deltaTime = 0;
 				if (System.currentTimeMillis() - sysTime < 1000) {
@@ -87,10 +98,6 @@ public class GameGui extends Thread implements GameListener {
 					}
 					if (!events.isEmpty()) {
 						StoredEvent event = events.peek();
-						if (event.getType() == GameEvent.GAME_BEGIN) {
-							our_player = (Player) event.getCard();
-							mouseProcess.player = our_player;
-						}
 						animation = Animation.createFor(event, scene, our_player);
 						System.out.println("read anim " + animation);
 					}

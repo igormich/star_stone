@@ -31,7 +31,7 @@ public class HotSeatRunner {
 		Player p1 = new Player("Первый игрок", deck1);
 		Player p2 = new Player("Второй второй", deck1);
 		Game game = new Game(p1, p2);
-		new GameGui(game);
+		new GameGui(game, p1);
 		game.nextTurn();
 	}
 }

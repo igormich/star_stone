@@ -98,4 +98,11 @@ public class Game {
 		card.addModifier(new CombatFatigue(card));
 	}
 
+	public List<CreatureCard> getAllCreaturesAndPlayers() {
+		List<CreatureCard> result = new ArrayList<>();
+		//result.addAll(players);
+		players.forEach(p -> result.addAll(p.getCreatures()));
+		return result;
+	}
+
 }

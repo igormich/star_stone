@@ -161,7 +161,7 @@ public class MouseProcess {
 				}
 			}
 		}
-		selected.startMoving(basePos);
+		GuiCard.get(creatureWithTarget).startMoving(basePos);
 		int i = 0;
 		List<CreatureCard> creatures = player.getCreatures();
 		for (CreatureCard creature : creatures) {
@@ -230,7 +230,7 @@ public class MouseProcess {
 			placePosition = p;
 			CreatureCard card = (CreatureCard) selected.getCard();
 			creatureWithTarget = card;
-			if (card.needTarget()) {
+			if (card.needTarget() && game.getAllCreaturesAndPlayers().stream().anyMatch(t -> card.isValidTarget(t))) {
 				state = State.SELECT_TARGET_FOR_BATLECRY;
 			} else {
 				new Thread(() -> player.play(card, null, placePosition)).start();
