@@ -25,7 +25,7 @@ import properties.MultiMesh;
 import utils.PrimitiveFactory;
 
 public class MouseProcess {
-	private static enum State {
+	public static enum State {
 		WAIT,
 		PLAY_CREATURE,
 		SELECT_TARGET_FOR_BATLECRY,
@@ -34,7 +34,7 @@ public class MouseProcess {
 		SELECT_TARGET_FOR_ATACK
 	}
 	private Object3d underCursor;
-	private GuiCard selected;
+	public GuiCard selected;
 	private Vector3f basePos;
 	public Object3d endTurnButton;
 	public Game game;
@@ -42,10 +42,10 @@ public class MouseProcess {
 	private Scene scene;
 	private Camera camera;
 	private Object3d place;
-	private State state = State.WAIT;
+	public State state = State.WAIT;
 	private GameGui gameGui;
 	private int placePosition;
-	private CreatureCard creatureWithTarget;
+	public CreatureCard creatureWithTarget;
 
 	public MouseProcess(Scene scene, Camera camera, Game game, GameGui gameGui) {
 		this.scene = scene;
@@ -303,7 +303,7 @@ public class MouseProcess {
 					game.getActivePlayer().play(game.getActivePlayer().getHand().get(0), null, 0);
 				}
 			}*/
-			game.nextTurn();
+			//game.nextTurn();
 		}).start();
 	}
 

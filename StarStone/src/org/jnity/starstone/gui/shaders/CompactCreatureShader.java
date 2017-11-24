@@ -21,7 +21,9 @@ public class CompactCreatureShader extends JFragmentShader {
 	@Uniform
 	Sampler2D shieldTex;
 	@Uniform
-	Vec4 stats;//no cost
+	Sampler2D target;
+	@Uniform
+	Vec4 stats;//no cost x - target
 	
 	@Uniform
 	Vec4 modifiers;//x-shild,y-shadow
@@ -76,6 +78,8 @@ public class CompactCreatureShader extends JFragmentShader {
 			number = texture2D(numbersTex, mul(costText, vec2(1f,0.1f)));
 		}
 		color = add(mul(color, 1-number.a), number);
+		
+		color = add(color, mul(texture2D(target, texCoord.st),stats.x));
 		
 		gl_FragColor = color;
 	}

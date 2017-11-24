@@ -38,12 +38,13 @@ public class ResInfo extends Object3d implements GameListener {
 		for (int i = 0; i < 10; i++) {
 			Object3d o = scene.add(mesh);
 			o.getPosition().setTranslation(-7f,0,-5+i*0.5f);
+			o.setVisible(false);
 			minerals.add(o);
 		}
 	}
 	@Override
 	public void on(GameEvent gameEvent, Card card, CreatureCard nothing) {
-		for (int i = game.getPlayerByID(player).getCurrentMinerals(); i <10; i++) {
+		for (int i = 0; i < 10; i++) {
 			minerals.get(i).setVisible(false);
 		}
 		for (int i = 0; i < game.getPlayerByID(player).getCurrentMinerals(); i++) {

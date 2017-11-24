@@ -1,6 +1,8 @@
 package org.jnity.starstone.core;
 
-public class GamePart {
+import java.io.Serializable;
+
+public class GamePart implements Serializable{
 	
 	private Game game;
 

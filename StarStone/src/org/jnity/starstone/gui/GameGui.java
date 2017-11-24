@@ -74,18 +74,20 @@ public class GameGui extends Thread implements GameListener {
 			GuiCard.init(scene.getMaterialLibrary());
 			
 			camera.getPosition().move(0, -10, 0).roll(90).turn(90);
-			scene.setBackColor(new Vector3f(0.5f, 1, 0.5f));
+			scene.setBackColor(new Vector3f(0.5f, 0.5f, 0.5f));
 			long sysTime = 0;
 
 			mouseProcess = new MouseProcess(scene, camera, game, this);
 			mouseProcess.player = our_player.getID();
+			GuiCard.mouseProcess = mouseProcess;//DIRTY
 			while(!game.isReady());
 			while (!Display.isCloseRequested()) {
 				float deltaTime = 0;
+				System.out.println(System.currentTimeMillis() - sysTime);
 				if (System.currentTimeMillis() - sysTime < 1000) {
 					deltaTime = (System.currentTimeMillis() - sysTime) / 1000f;
 					//if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
-						deltaTime *= 10;
+						deltaTime *= 5;
 				}
 				sysTime = System.currentTimeMillis();
 				mouseProcess.tick();
@@ -121,12 +123,12 @@ public class GameGui extends Thread implements GameListener {
 
 	@Override
 	public void on(GameEvent gameEvent, Card card, CreatureCard target) {
-		events.add(new StoredEvent(gameEvent, card, target));
-		System.out.println("wait");
+		events.add(new StoredEvent(gameEvent, card, target, game));
+		//System.out.println("wait");
 		while (!events.isEmpty()){
 			
 		}
-		System.out.println("end anim");
+		//System.out.println("end anim");
 	}
 
 	public void setMessage(String message) {

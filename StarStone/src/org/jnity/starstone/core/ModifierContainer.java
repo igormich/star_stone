@@ -1,11 +1,16 @@
 package org.jnity.starstone.core;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.jnity.starstone.modifiers.Modifier;
 
-public class ModifierContainer extends GamePart {
+public class ModifierContainer extends GamePart implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8600962131430277113L;
 	private final ArrayList<Modifier> modifiers = new ArrayList<>();
 	
 	public List<Modifier> getModifiers() {

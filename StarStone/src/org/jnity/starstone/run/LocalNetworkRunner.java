@@ -1,19 +1,16 @@
 package org.jnity.starstone.run;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.jnity.starstone.cards.Card;
-import org.jnity.starstone.core.Game;
 import org.jnity.starstone.core.Player;
 import org.jnity.starstone.core.TextHolder;
-import org.jnity.starstone.events.GameEvent;
 import org.jnity.starstone.gui.GameGui;
 import org.jnity.starstone.nerazim.creatures.Centurion;
 import org.jnity.starstone.nerazim.creatures.DarkStalker;
 import org.jnity.starstone.net.GameClient;
-import org.jnity.starstone.net.GameServer;
+import org.jnity.starstone.net.Server;
 import org.jnity.starstone.protoss.creatures.ShieldRecharge;
 import org.jnity.starstone.protoss.creatures.ShildBattery;
 import org.jnity.starstone.protoss.creatures.Zealot;
@@ -21,9 +18,9 @@ import org.jnity.starstone.protoss.creatures.Zealot;
 public class LocalNetworkRunner {
 	public static void main(String[] args) throws Exception {
 		
-		GameServer gameServer = new GameServer();
-		gameServer.setDaemon(true);
-		gameServer.start();
+		Server server = new Server();
+		server.setDaemon(true);
+		server.start();
 		
 		TextHolder.load("./text/ru.inf");
 		List<Card> deck1 = new ArrayList<>();
@@ -41,6 +38,7 @@ public class LocalNetworkRunner {
 				Thread.sleep(2000);
 				Player p1 = new Player("Второй игрок", deck1);
 				GameClient gameClient = new GameClient(p1, "localhost");
+				new PassBot(gameClient, p1);
 				gameClient.start();
 			} catch (Exception e) {
 				e.printStackTrace();

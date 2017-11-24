@@ -53,6 +53,8 @@ public class Card extends ModifierContainer implements Cloneable, Serializable{
 	protected final int priceInGas;
 	private Player player;
 
+	private boolean onDesk;
+
 	public int getPriceInGas() {
 		int result = priceInGas;
 		for (Modifier modifier : getModifiers())
@@ -114,19 +116,19 @@ public class Card extends ModifierContainer implements Cloneable, Serializable{
 	}
 	
 	public void play(CreatureCard target) {
-		getGame().emit(GameEvent.PLAY, this);
+		
 	}
 
 	@Override
 	public String toString() {
-		return getName() + " M:" +  getPriceInMineral();
+		return getName() + " M:" +  getPriceInMineral() +" " + getModifiers();
 	}
 
 	public void setOwner(Player player) {
 		this.player = player;
 	}
 	public Player getOwner() {
-		Player result = player;
+		Player result = getGame().getPlayerByID(player.getID());
 		for (Modifier modifier : getModifiers())
 			result = modifier.modifyPlayer(result, this);
 		return result;
@@ -162,6 +164,10 @@ public class Card extends ModifierContainer implements Cloneable, Serializable{
 		return id;
 	}
 
-
-
+	public void setOnDesk(boolean b) {
+		onDesk = b;
+	}
+	public boolean onDesk() {
+		return onDesk;
+	}
 }

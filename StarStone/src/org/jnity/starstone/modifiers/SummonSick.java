@@ -11,7 +11,7 @@ public class SummonSick extends CreatureModifier implements GameListener {
 		super(target);
 		target.getGame().addListener(this);
 	}
-	public void on(GameEvent gameEvent, Card card) {
+	public void on(GameEvent gameEvent, Card card, CreatureCard unused) {
 		if (gameEvent == GameEvent.END_OF_TURN) {
 			getTarget().removeModifier(this);
 			getTarget().getGame().removeListener(this);

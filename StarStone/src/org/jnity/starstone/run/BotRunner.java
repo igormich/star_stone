@@ -31,10 +31,9 @@ public class BotRunner {
 		deck1.add(new Zealot());
 	
 		Player p1 = new Player("Первый игрок", deck1);
-		
-		
 		Player p2 = new Player("Второй второй", deck1);
 		Game game = new Game(p1, p2);
+		new PassBot(game, p2);
 		new GameGui(game, p1);
 		game.nextTurn();
 	}

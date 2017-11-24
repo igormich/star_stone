@@ -6,7 +6,7 @@ import org.jnity.starstone.events.GameListener;
 import org.jnity.starstone.modifiers.Invulnerability;
 import org.jnity.starstone.protoss.creatures.Hallucination;
 
-public class Hallucinations extends SpellCard implements GameListener {
+public class Hallucinations extends SpellCard {
 
     private static final long serialVersionUID = 1621291416537476469L;
 

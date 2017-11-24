@@ -14,7 +14,7 @@ public class DarkStalker extends CreatureCard {
 	@Override
 	public void play(CreatureCard target) {
 		super.play(target);
-		if (getOwner().getCountPlayedCard() > 0)
+		if (getOwner().getCountPlayedCard() > 1)
 			target.takeDamage(2);
 	}
 

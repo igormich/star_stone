@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.jnity.starstone.cards.Card;
@@ -18,7 +19,7 @@ public class Game implements Serializable {
 	 */
 	private static final long serialVersionUID = -8168645814801696635L;
 	protected final ArrayList<GameListener> listeners = new ArrayList<>();
-	protected final List<Player> players = new ArrayList<>();
+	protected List<Player> players = new ArrayList<>();
 	protected final AtomicInteger turnNumber = new AtomicInteger(0);
 	protected volatile Player activePlayer;
 
@@ -99,11 +100,11 @@ public class Game implements Serializable {
 	public void battle(CreatureCard card, CreatureCard target) {
 		int atackerPower = card.getPower();
 		int defenderPower = target.getPower();
-		emit(GameEvent.ATACKS, card, target);
-		emit(GameEvent.DEFENDED, target, card);
 		card.takeDamage(defenderPower);
 		target.takeDamage(atackerPower);
 		card.addModifier(new CombatFatigue(card));
+		emit(GameEvent.ATACKS, card, target);
+		emit(GameEvent.DEFENDED, target, card);
 	}
 
 	public List<CreatureCard> getAllCreaturesAndPlayers() {
@@ -126,6 +127,19 @@ public class Game implements Serializable {
 	}
 	public void play(Card card, CreatureCard target, int placePosition) {
 		activePlayer.play(card,target,placePosition);
+	}
+	public Card getCardBySerial(int serial) {
+		return getAll().stream().filter(c -> c.getSerial() == serial).findAny().orElseGet(() -> null);
+	}
+	public Card renewCard(Card card) {
+		Card found = getCardBySerial(card.getSerial());
+		if (found != null) {
+			return found;
+		}
+		return card;
+	}
+	public Player getOpponent(Player player) {
+		return players.stream().filter(p->!player.equals(p)).findAny().get();
 	}
 
 }

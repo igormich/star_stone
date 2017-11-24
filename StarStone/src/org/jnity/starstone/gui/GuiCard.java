@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 
 import org.jnity.starstone.cards.Card;
 import org.jnity.starstone.cards.CreatureCard;
+import org.jnity.starstone.gui.MouseProcess.State;
 import org.jnity.starstone.gui.shaders.CardShader;
 import org.jnity.starstone.gui.shaders.CompactCreatureShader;
 import org.jnity.starstone.gui.shaders.CreatureShader;
@@ -36,6 +37,8 @@ public class GuiCard extends Object3d{
 	private static Mesh creatureMesh;
 	private static Shader compactCreatureShader;
 	
+	public static MouseProcess mouseProcess;
+	
 	public static void init(MaterialLibrary materialLibrary) throws IOException {
 		cardMesh = CardMeshBuilder.createCardMesh();
 		creatureMesh = CardMeshBuilder.createCreatureMesh();
@@ -64,6 +67,8 @@ public class GuiCard extends Object3d{
 		Texture shield = new Texture2D("eff_shield.jpg");
 		compactCreatureShader.addTexture(shadow, "shadowTex");
 		compactCreatureShader.addTexture(shield, "shieldTex");
+		Texture target = new Texture2D("target.png");
+		compactCreatureShader.addTexture(target, "target");
 		materialLibrary.addMaterial("cardShader", cardShader);
 		materialLibrary.addMaterial("creatureShader", creatureShader);
 		materialLibrary.addMaterial("compactCreatureShader", compactCreatureShader);
@@ -95,13 +100,23 @@ public class GuiCard extends Object3d{
 
 			@Override
 			public void render(RenderContex renderContex, Object3d owner) {
-				
+				Card card = GuiCard.this.getCard();
 				if(card instanceof CreatureCard) {
 					CreatureCard cCard = (CreatureCard) card;
 					cardMesh.setMaterialName("creatureShader");
-					if(card.getOwner().getCreatures().contains(card)) {
+					if(card.onDesk()) {
+						float target = 0;
+						if ((mouseProcess.state == State.SELECT_TARGET_FOR_ATACK) && (mouseProcess.selected.getCard().canAtack(cCard))) {
+							target = 1;
+						}
+						if ((mouseProcess.state == State.PLAY_SPELL_WITH_TARGET) && (mouseProcess.selected.getCard().isValidTarget(cCard))) {
+							target = 1;
+						}
+						if ((mouseProcess.state == State.SELECT_TARGET_FOR_BATLECRY) && (mouseProcess.creatureWithTarget.isValidTarget(cCard))) {
+							target = 1;
+						}
 						compactCreatureShader.addTexture(faceTex, "faceTex");
-						compactCreatureShader.setUniform(new Vector4f(card.getPriceInMineral(), card.getPriceInGas(), cCard.getPower(), cCard.getCurrentHits()), "stats");
+						compactCreatureShader.setUniform(new Vector4f(target, 0, cCard.getPower(), cCard.getCurrentHits()), "stats");
 						Vector4f modifiers = new Vector4f();
 						if (card.getModifiers().stream().anyMatch(m -> m.getClass().equals(PlasmaShield.class)))
 							modifiers.x = 0.5f;
@@ -109,18 +124,16 @@ public class GuiCard extends Object3d{
 							modifiers.y = 0.5f;
 						compactCreatureShader.setUniform(modifiers, "modifiers");
 						compactCreatureShader.setUniform(renderContex.getTime(), "time");
-					}
-					else {
+					} else {
 						creatureShader.addTexture(faceTex, "faceTex");
 						creatureShader.setUniform(new Vector4f(card.getPriceInMineral(), card.getPriceInGas(), cCard.getPower(), cCard.getCurrentHits()), "stats");
 					}
-					
 				} else {
 					cardMesh.setMaterialName("cardShader");
 					cardShader.addTexture(faceTex, "faceTex");
 					cardShader.setUniform(new Vector4f(card.getPriceInMineral(), card.getPriceInGas(), 0, 0), "stats");
 				}
-				if(card.getOwner().getCreatures().contains(card)) {
+				if(card.onDesk()) {
 					creatureMesh.render(renderContex, owner);
 				} else {
 					cardMesh.render(renderContex, owner);
@@ -167,6 +180,10 @@ public class GuiCard extends Object3d{
 	}
 
 	public Card getCard() {
+		Card found = card.getGame().renewCard(card);
+		if (found != null) {
+			return found;
+		}
 		return card;
 	}
 

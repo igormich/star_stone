@@ -101,11 +101,13 @@ public class Player extends CreatureCard implements GameListener {
 
 		if (card instanceof CreatureCard) {
 			putCreature(card, position);
+			card.setOnDesk(true);
 		}
 		currentMinerals -= card.getPriceInMineral();
 		currentVespenGase -= card.getPriceInGas();
-		card.play(target);
 		playedCardCount++;
+		card.play(target);
+		getGame().emit(GameEvent.PLAY, card);
 	}
 
 	public void putCreature(Card card, int position) {

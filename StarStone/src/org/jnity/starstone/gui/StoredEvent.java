@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.jnity.starstone.cards.Card;
 import org.jnity.starstone.cards.CreatureCard;
+import org.jnity.starstone.core.Game;
 import org.jnity.starstone.events.GameEvent;
 
 public class StoredEvent implements Serializable{
@@ -14,15 +15,17 @@ public class StoredEvent implements Serializable{
 		private final GameEvent type;
 		private final Card card;
 		private final CreatureCard target;
+		private final Game game;
 
-		public StoredEvent(GameEvent gameEvent, Card card, CreatureCard target) {
+		public StoredEvent(GameEvent gameEvent, Card card, CreatureCard target, Game game) {
 			type = gameEvent;
 			this.card = card;
 			this.target = target;
+			this.game = game;
 		}
 
-		public StoredEvent(GameEvent gameEvent, Card card) {
-			this(gameEvent, card, null);
+		public StoredEvent(GameEvent gameEvent, Card card, Game game) {
+			this(gameEvent, card, null, game);
 		}
 
 		public GameEvent getType() {
@@ -30,10 +33,18 @@ public class StoredEvent implements Serializable{
 		}
 
 		public Card getCard() {
-			return card;
+			return game.renewCard(card);
 		}
 
 		public CreatureCard getTarget() {
-			return target;
+			if(target!=null) {
+				return (CreatureCard) game.renewCard(target);
+			} else {
+				return null;
+			}
+		}
+
+		public Game getGame() {
+			return game;
 		}
 	}
