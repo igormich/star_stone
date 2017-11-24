@@ -31,7 +31,7 @@ public class Queen extends CreatureCard implements GameListener{
     }
 
     @Override
-    public void on(GameEvent gameEvent, Card card) {
+    public void on(GameEvent gameEvent, Card card, CreatureCard nothing) {
 
         if(GameEvent.PLAY == gameEvent
                 && card instanceof CreatureCard

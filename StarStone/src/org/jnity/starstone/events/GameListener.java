@@ -7,7 +7,7 @@ public interface GameListener {
 	default void on(GameEvent gameEvent, Card card, CreatureCard target) {
 		
 	}
-	default void on(GameEvent gameEvent, Card card) {
+	/*default void on(GameEvent gameEvent, Card card) {
 		
-	}
+	}*/
 }

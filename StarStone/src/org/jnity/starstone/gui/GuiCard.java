@@ -69,12 +69,12 @@ public class GuiCard extends Object3d{
 		materialLibrary.addMaterial("compactCreatureShader", compactCreatureShader);
 	}
 	
-	private float time = 0;
+	private float time = 2;
 	private Card card;
 	private Texture2D faceTex;
 
-	protected Vector3f startTranslation;
-	protected Vector3f endTranslation;
+	volatile protected Vector3f startTranslation;
+	volatile protected Vector3f endTranslation;
 
 	public GuiCard(Card card) {
 		this.card = card;
@@ -150,14 +150,16 @@ public class GuiCard extends Object3d{
 									 	 startTranslation.y * (1- getTime()) + endTranslation.y*getTime(),
 									 	 startTranslation.z * (1- getTime()) + endTranslation.z*getTime());
 		} else {
-			getPosition().setTranslation(endTranslation);
+			if(endTranslation!=null) {
+				getPosition().setTranslation(endTranslation);
+			}
 		}
 	}
 
 	public void startMoving(Vector3f start, Vector3f end) {
-		time = 0;
 		startTranslation = start;
 		endTranslation = end;
+		time = 0;
 	}
 
 	public void startMoving(Vector3f vector3f) {

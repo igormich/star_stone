@@ -1,5 +1,6 @@
 package org.jnity.starstone.core;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -11,12 +12,19 @@ import org.jnity.starstone.events.GameEvent;
 import org.jnity.starstone.events.GameListener;
 import org.jnity.starstone.modifiers.CombatFatigue;
 
-public class Game {
-	private final ArrayList<GameListener> listeners = new ArrayList<>();
-	private final List<Player> players = new ArrayList<>();
-	private AtomicInteger turnNumber = new AtomicInteger(0);
-	private Player activePlayer;
+public class Game implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8168645814801696635L;
+	protected final ArrayList<GameListener> listeners = new ArrayList<>();
+	protected final List<Player> players = new ArrayList<>();
+	protected final AtomicInteger turnNumber = new AtomicInteger(0);
+	protected volatile Player activePlayer;
 
+	public Game() {
+		
+	}
 	public Game(Player p1, Player p2) {
 		players.add(p1);
 		players.add(p2);
@@ -54,7 +62,7 @@ public class Game {
 		@SuppressWarnings("unchecked")
 		ArrayList<GameListener> listeners = (ArrayList<GameListener>)this.listeners.clone();
 		for (GameListener gameListener :  listeners) {
-			gameListener.on(gameEvent, card);
+			gameListener.on(gameEvent, card, null);
 		}
 	}
 
@@ -100,9 +108,24 @@ public class Game {
 
 	public List<CreatureCard> getAllCreaturesAndPlayers() {
 		List<CreatureCard> result = new ArrayList<>();
-		//result.addAll(players);
+		result.addAll(players);
 		players.forEach(p -> result.addAll(p.getCreatures()));
 		return result;
+	}
+	public List<Card> getAll() {
+		List<Card> result = new ArrayList<>();
+		result.addAll(getAllCreaturesAndPlayers());
+		players.forEach(p -> result.addAll(p.getHand()));
+		return result;
+	}
+	public boolean isReady() {
+		return activePlayer != null;
+	}
+	public Player getPlayerByID(String player) {
+		return players.stream().filter(p -> p.getID().equals(player)).findFirst().get();
+	}
+	public void play(Card card, CreatureCard target, int placePosition) {
+		activePlayer.play(card,target,placePosition);
 	}
 
 }

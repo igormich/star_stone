@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jnity.starstone.cards.Card;
+import org.jnity.starstone.cards.CreatureCard;
 import org.jnity.starstone.core.Game;
 import org.jnity.starstone.core.Player;
 import org.jnity.starstone.events.GameEvent;
@@ -22,11 +23,11 @@ public class ResInfo extends Object3d implements GameListener {
 
 	List<Object3d> minerals = new ArrayList<Object3d>();
 
-	private Player player; 
-	public ResInfo(Game game, Scene scene, Player player) {
+	private String player; 
+	public ResInfo(Game game, Scene scene, String playerID) {
 		
 		this.game = game;
-		this.player = player;
+		this.player = playerID;
 		this.game.addListener(this);
 		
 		scene.getMaterialLibrary().addMaterial("minerals_ico", new TexturedMaterial("minerals.png")).setBlendMode(SimpleMaterial.TRANSPARENCY).setUseLigth(false);
@@ -41,11 +42,11 @@ public class ResInfo extends Object3d implements GameListener {
 		}
 	}
 	@Override
-	public void on(GameEvent gameEvent, Card card) {
-		for (int i = player.getCurrentMinerals(); i <10; i++) {
+	public void on(GameEvent gameEvent, Card card, CreatureCard nothing) {
+		for (int i = game.getPlayerByID(player).getCurrentMinerals(); i <10; i++) {
 			minerals.get(i).setVisible(false);
 		}
-		for (int i = 0; i < player.getCurrentMinerals(); i++) {
+		for (int i = 0; i < game.getPlayerByID(player).getCurrentMinerals(); i++) {
 			minerals.get(i).setVisible(true);
 		}
 	}

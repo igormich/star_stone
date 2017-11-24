@@ -1,10 +1,16 @@
 package org.jnity.starstone.gui;
 
+import java.io.Serializable;
+
 import org.jnity.starstone.cards.Card;
 import org.jnity.starstone.cards.CreatureCard;
 import org.jnity.starstone.events.GameEvent;
 
-public class StoredEvent {
+public class StoredEvent implements Serializable{
+		/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7740122099419816020L;
 		private final GameEvent type;
 		private final Card card;
 		private final CreatureCard target;

@@ -79,11 +79,15 @@ public class Player extends CreatureCard implements GameListener {
 
 	@Override
 	public void setGame(Game game) {
-		if (!creatures.isEmpty() || !hand.isEmpty())
-			throw new GameException("Game must be set before otner actions");
+		//if (!creatures.isEmpty() || !hand.isEmpty())
+		//	throw new GameException("Game must be set before otner actions");
 		super.setGame(game);
 		deck.forEach(c -> c.setGame(game));
 		deck.forEach(c -> c.setOwner(this));
+		creatures.forEach(c -> c.setGame(game));
+		creatures.forEach(c -> c.setOwner(this));
+		hand.forEach(c -> c.setGame(game));
+		hand.forEach(c -> c.setOwner(this));
 		this.setOwner(this);
 		game.addListener(this);
 	}
@@ -128,7 +132,7 @@ public class Player extends CreatureCard implements GameListener {
 	}
 
 	@Override
-	public void on(GameEvent gameEvent, Card card) {
+	public void on(GameEvent gameEvent, Card card, CreatureCard nothing) {
 		if (GameEvent.DIES == gameEvent && creatures.contains(card)) {
 			creatures.remove(card);
 		}
@@ -177,6 +181,31 @@ public class Player extends CreatureCard implements GameListener {
 		if (hand.size() < MAX_HAND_SIZE) {
 			hand.add(card);
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((getID() == null) ? 0 : getID().hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Player other = (Player) obj;
+		if (getID() == null) {
+			if (other.getID() != null)
+				return false;
+		} else if (!getID().equals(other.getID()))
+			return false;
+		return true;
 	}
 
 }

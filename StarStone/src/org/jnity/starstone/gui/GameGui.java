@@ -69,7 +69,7 @@ public class GameGui extends Thread implements GameListener {
 			cameraBox.addChild(camera);
 			scene.add(cameraBox);
 			
-			ResInfo resInfo = new ResInfo(game, scene, our_player);
+			new ResInfo(game, scene, our_player.getID());
 
 			GuiCard.init(scene.getMaterialLibrary());
 			
@@ -78,7 +78,8 @@ public class GameGui extends Thread implements GameListener {
 			long sysTime = 0;
 
 			mouseProcess = new MouseProcess(scene, camera, game, this);
-			mouseProcess.player = our_player;
+			mouseProcess.player = our_player.getID();
+			while(!game.isReady());
 			while (!Display.isCloseRequested()) {
 				float deltaTime = 0;
 				if (System.currentTimeMillis() - sysTime < 1000) {
@@ -128,15 +129,6 @@ public class GameGui extends Thread implements GameListener {
 		System.out.println("end anim");
 	}
 
-	@Override
-	public void on(GameEvent gameEvent, Card card) {
-		events.add(new StoredEvent(gameEvent, card));
-		System.out.println("wait");
-		while (!events.isEmpty()){
-			
-		}
-		System.out.println("end anim");
-	}
 	public void setMessage(String message) {
 		Display.setTitle(TextHolder.getName(message));	
 	}

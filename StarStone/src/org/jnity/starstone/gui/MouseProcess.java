@@ -38,7 +38,7 @@ public class MouseProcess {
 	private Vector3f basePos;
 	public Object3d endTurnButton;
 	public Game game;
-	public Player player;
+	public String player;
 	private Scene scene;
 	private Camera camera;
 	private Object3d place;
@@ -63,7 +63,7 @@ public class MouseProcess {
 	}
 
 	public void tick() {
-		boolean canTouch = game.getActivePlayer().equals(player);
+		boolean canTouch = game.getActivePlayer().getID().equals(player);
 		if(!canTouch)
 			return;
 		int x = Mouse.getX();
@@ -74,7 +74,7 @@ public class MouseProcess {
 			break;
 		case PLAY_CREATURE:
 			int i = 0;
-			List<CreatureCard> creatures = player.getCreatures();
+			List<CreatureCard> creatures = game.getPlayerByID(player).getCreatures();
 			for(CreatureCard creature: creatures) {
 				GuiCard guiCard = GuiCard.get(creature);
 				float fx = -creatures.size()/2 + i;
@@ -156,14 +156,14 @@ public class MouseProcess {
 			if (card instanceof CreatureCard) {
 				CreatureCard target = (CreatureCard) card;
 				if (creatureWithTarget.isValidTarget(target)) {
-					new Thread(() -> player.play(creatureWithTarget, target, placePosition)).start();
+					new Thread(() -> game.play(creatureWithTarget, target, placePosition)).start();
 					return;
 				}
 			}
 		}
 		GuiCard.get(creatureWithTarget).startMoving(basePos);
 		int i = 0;
-		List<CreatureCard> creatures = player.getCreatures();
+		List<CreatureCard> creatures = game.getPlayerByID(player).getCreatures();
 		for (CreatureCard creature : creatures) {
 			GuiCard guiCard = GuiCard.get(creature);
 			float x = -creatures.size() / 2 + i;
@@ -197,8 +197,7 @@ public class MouseProcess {
 			Card target = ((GuiCard)underCursor).getCard();
 			if(selected.getCard().isValidTarget(target)) {
 				new Thread(() -> 
-					player.play(card, (CreatureCard) target, -1)
-					).start();
+				game.play(card, (CreatureCard) target, -1)).start();
 				scene.remove(selected);
 			} else {
 				selected.startMoving(basePos);
@@ -211,7 +210,7 @@ public class MouseProcess {
 	private void playSpellWithoutTarget() {
 		state = State.WAIT;
 		if (selected.getPosition().getTranslation().z>-4) {//TODO:fix
-			new Thread(() -> player.play(selected.getCard(), null, -1)).start();
+			new Thread(() -> game.play(selected.getCard(), null, -1)).start();
 		} else {
 			selected.startMoving(basePos);
 		}
@@ -220,7 +219,7 @@ public class MouseProcess {
 	private void playCreature() {
 		state = State.WAIT;
 		if (place.equals(underCursor)) {
-			List<CreatureCard> creatures = player.getCreatures();
+			List<CreatureCard> creatures = game.getPlayerByID(player).getCreatures();
 			int p = 0;
 			for(CreatureCard creatureCard: creatures) {
 				if(GuiCard .get(creatureCard).getPosition().getTranslation().x > selected.getPosition().getTranslation().x)
@@ -233,12 +232,12 @@ public class MouseProcess {
 			if (card.needTarget() && game.getAllCreaturesAndPlayers().stream().anyMatch(t -> card.isValidTarget(t))) {
 				state = State.SELECT_TARGET_FOR_BATLECRY;
 			} else {
-				new Thread(() -> player.play(card, null, placePosition)).start();
+				new Thread(() -> game.play(card, null, placePosition)).start();
 			}
 		} else {
 			selected.startMoving(basePos);
 			int i = 0;
-			List<CreatureCard> creatures = player.getCreatures();
+			List<CreatureCard> creatures = game.getPlayerByID(player).getCreatures();
 			for(CreatureCard creature: creatures) {
 				GuiCard guiCard = GuiCard.get(creature);
 				float x= -creatures.size()/2 + i;
@@ -252,17 +251,17 @@ public class MouseProcess {
 		if(underCursor instanceof GuiCard) {
 			GuiCard guiCard = (GuiCard) underCursor;
 			Card card = guiCard.getCard();
-			if (player.getHand().contains(card)) {
+			if (game.getPlayerByID(player).getHand().contains(card)) {
 				playCard(guiCard, card);
 			}
-			if (player.getCreatures().contains(card)) {
+			if (game.getPlayerByID(player).getCreatures().contains(card)) {
 				atack(guiCard, card);
 			}
 		}
 	}
 
 	private void atack(GuiCard guiCard, Card card) {
-		if(player.canAtack(guiCard.getCard())) {
+		if(game.getPlayerByID(player).canAtack(guiCard.getCard())) {
 			selected =  guiCard;
 			basePos = selected.getPosition().getTranslation();
 			state = State.SELECT_TARGET_FOR_ATACK;
@@ -278,7 +277,7 @@ public class MouseProcess {
 	}
 
 	private void playCard(GuiCard guiCard, Card card) {
-		if(player.canPlay(card)) {
+		if(game.getPlayerByID(player).canPlay(card)) {
 			selected = guiCard;
 			basePos = selected.getPosition().getTranslation();
 			if(card instanceof SpellCard) {
@@ -298,12 +297,12 @@ public class MouseProcess {
 	private void nextTurn() {
 		new Thread(() -> {
 			game.nextTurn();
-			if (game.getActivePlayer().getHand().size() > 0) {
+			/*if (game.getActivePlayer().getHand().size() > 0) {
 				Card c = game.getActivePlayer().getHand().get(0);
 				if (game.getActivePlayer().canPlay(c) && !c.needTarget()) {
 					game.getActivePlayer().play(game.getActivePlayer().getHand().get(0), null, 0);
 				}
-			}
+			}*/
 			game.nextTurn();
 		}).start();
 	}
