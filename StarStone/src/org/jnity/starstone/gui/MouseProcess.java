@@ -156,7 +156,8 @@ public class MouseProcess {
 			if (card instanceof CreatureCard) {
 				CreatureCard target = (CreatureCard) card;
 				if (creatureWithTarget.isValidTarget(target)) {
-					new Thread(() -> game.play(creatureWithTarget, target, placePosition)).start();
+					CreatureCard creatureCard = creatureWithTarget;
+					new Thread(() -> game.play(creatureCard, target, placePosition)).start();
 					return;
 				}
 			}
@@ -210,7 +211,9 @@ public class MouseProcess {
 	private void playSpellWithoutTarget() {
 		state = State.WAIT;
 		if (selected.getPosition().getTranslation().z>-4) {//TODO:fix
-			new Thread(() -> game.play(selected.getCard(), null, -1)).start();
+			Card c = selected.getCard();
+			new Thread(() -> game.play(c, null, -1)).start();
+			scene.remove(selected);
 		} else {
 			selected.startMoving(basePos);
 		}

@@ -22,12 +22,7 @@ import org.lwjgl.util.vector.Vector3f;
 import base.Camera;
 import base.Object3d;
 import base.Scene;
-import materials.SimpleMaterial;
 import materials.Texture2D;
-import materials.TexturedMaterial;
-import primitives.Plane;
-import properties.Mesh;
-import utils.PrimitiveFactory;
 
 public class GameGui extends Thread implements GameListener {
 
@@ -43,11 +38,13 @@ public class GameGui extends Thread implements GameListener {
 	private Animation animation;
 
 	ResInfo resInfo;
+	private volatile boolean init = false;
 	public GameGui(Game game, Player our_player) throws IOException {
 		this.our_player = our_player;
 		this.game = game;
 		game.addListener(this);
 		start();
+		while(!init);
 	}
 
 	@Override
@@ -80,10 +77,11 @@ public class GameGui extends Thread implements GameListener {
 			mouseProcess = new MouseProcess(scene, camera, game, this);
 			mouseProcess.player = our_player.getID();
 			GuiCard.mouseProcess = mouseProcess;//DIRTY
+			init = true;
 			while(!game.isReady());
 			while (!Display.isCloseRequested()) {
 				float deltaTime = 0;
-				System.out.println(System.currentTimeMillis() - sysTime);
+				//System.out.println(System.currentTimeMillis() - sysTime);
 				if (System.currentTimeMillis() - sysTime < 1000) {
 					deltaTime = (System.currentTimeMillis() - sysTime) / 1000f;
 					//if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))

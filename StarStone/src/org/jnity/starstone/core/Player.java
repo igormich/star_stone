@@ -197,8 +197,6 @@ public class Player extends CreatureCard implements GameListener {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!super.equals(obj))
-			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		Player other = (Player) obj;

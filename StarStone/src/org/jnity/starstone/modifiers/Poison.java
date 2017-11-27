@@ -6,15 +6,15 @@ import org.jnity.starstone.events.GameEvent;
 
 public class Poison extends CreatureModifier{
 
-    public Poison(CreatureCard target) {
+    private int time;
+
+	public Poison(CreatureCard target, int time) {
         super(target);
+		this.time = time;
     }
 
     public void on(GameEvent gameEvent, Card card) {
-
-        int count = 0;
-        if(GameEvent.END_OF_TURN == gameEvent && count < 2) {
-            count++;
+        if(GameEvent.END_OF_TURN == gameEvent && card.equals(getTarget().getOwner()) && time >0 ) {
             getTarget().takeDamage(1);
         } else getTarget().removeModifier(this);
     }

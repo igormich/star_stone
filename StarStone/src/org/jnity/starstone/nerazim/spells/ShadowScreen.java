@@ -9,7 +9,7 @@ public class ShadowScreen extends SpellCard {
     private static final long serialVersionUID = 1188850524421203942L;
 
     public ShadowScreen() {
-        super("SHADOWSCREEN", 0, 0);
+        super("SHADOWSCREEN", 2, 0);
     }
 
     @Override

@@ -25,9 +25,12 @@ public class GameClient extends Game implements Runnable {
 	private String host;
 	private Player player;
 	private ObjectOutputStream oos;
+	private String name;
+	private int deckId;
 
-	public GameClient(Player player, String host) throws UnknownHostException, IOException, ClassNotFoundException {
-		this.player = player;
+	public GameClient(String name, int deckId, String host) throws UnknownHostException, IOException, ClassNotFoundException {
+		this.deckId = deckId;
+		this.name = name; 
 		this.host = host;
 	}
 
@@ -49,7 +52,8 @@ public class GameClient extends Game implements Runnable {
 		try (Socket socket = new Socket(host, 666);) {
 			oos = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 			oos.flush();
-			oos.writeObject(player);
+			oos.writeObject(name);
+			oos.writeInt(deckId);
 			oos.flush();
 			ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
 			while (true) {

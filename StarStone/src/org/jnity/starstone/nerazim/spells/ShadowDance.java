@@ -15,7 +15,7 @@ public class ShadowDance extends SpellCard {
     private static int POWER_BUFF = 2;
 
     public ShadowDance() {
-        super("SHADOWDANCE", 0, 0);
+        super("SHADOWDANCE", 4, 0);
     }
 
     @Override

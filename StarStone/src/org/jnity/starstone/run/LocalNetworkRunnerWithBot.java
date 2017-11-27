@@ -15,7 +15,7 @@ import org.jnity.starstone.protoss.creatures.ShieldRecharge;
 import org.jnity.starstone.protoss.creatures.ShildBattery;
 import org.jnity.starstone.protoss.creatures.Zealot;
 
-public class LocalNetworkRunner {
+public class LocalNetworkRunnerWithBot {
 	public static void main(String[] args) throws Exception {
 		
 		Server server = new Server();
@@ -37,7 +37,7 @@ public class LocalNetworkRunner {
 			try {
 				Thread.sleep(2000);
 				Player p1 = new Player("Второй игрок", deck1);
-				GameClient gameClient = new GameClient(p1, "localhost");
+				GameClient gameClient = new GameClient("Второй игрок",0, "localhost");
 				new PassBot(gameClient, p1);
 				gameClient.start();
 			} catch (Exception e) {
@@ -48,7 +48,7 @@ public class LocalNetworkRunner {
 		botThread.start();
 		
 		Player p1 = new Player("Первый игрок", deck1);
-		GameClient gameClient = new GameClient(p1, "localhost");
+		GameClient gameClient = new GameClient("Первый игрок",0, "localhost");
 		//Player p2 = new Player("Второй второй", deck1);
 		
 		//Game game = new Game(p1, p2);

@@ -46,5 +46,10 @@ public class Server extends Thread {
 			e1.printStackTrace();
 		}
 	}
+	public static void main(String[] args) throws Exception {		
+		Server server = new Server();
+		server.run();
+	}
+		
 
 }

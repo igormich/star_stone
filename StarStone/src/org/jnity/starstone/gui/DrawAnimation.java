@@ -16,6 +16,9 @@ public class DrawAnimation extends Animation {
 		card3d = new GuiCard(card);
 		scene.add(card3d);
 		int mirrow = 1;
+		System.out.println(gamer);
+		System.out.println(card.getOwner());
+		System.out.println(card.getOwner().equals(gamer));
 		if (!card.getOwner().equals(gamer)) {
 			mirrow = -1;
 			card3d.getPosition().turn(180);
@@ -26,7 +29,6 @@ public class DrawAnimation extends Animation {
 		for(Card cardInHand: hand) {
 			GuiCard guiCard = GuiCard.get(cardInHand);
 			float x= -hand.size()/2f + i;
-			System.out.println(new Vector3f(x*mirrow,0,-6.5f*mirrow));
 			guiCard.startMoving(new Vector3f(x*mirrow,0,-6.5f*mirrow));
 			i++;
 		}

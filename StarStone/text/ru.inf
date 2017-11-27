@@ -26,6 +26,14 @@ MOBILIZATION=Мобилизация
 MOBILIZATION_DESK=Призывает двух морпехов
 MOBILIZATION_ABOUT=Это вам не фей-парад
 
+SHADOWSCREEN=Сумерки
+SHADOWSCREEN_DESK=Даёт всем вашим существам маскировку
+SHADOWSCREEN_ABOUT=Сгущаются сумерки
+
+SHADOWDANCE=Танец с тенями
+SHADOWDANCE_DESK=Даёт всем вашим существам с маскировкой +2 к атаке до конца хода.
+SHADOWDANCE_ABOUT=После джанги, начинается вьюга.
+
 
 
 SUMMON_SICK=Это существо сможет атаковать на следующий ход
