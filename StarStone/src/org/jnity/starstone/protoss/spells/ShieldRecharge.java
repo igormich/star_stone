@@ -11,6 +11,6 @@ public class ShieldRecharge extends SpellCard {
 		super("RECHARGE_SHIELDS", 1, 0);
 	}
 	public void play(CreatureCard target) {
-		target.addModifier(new PlasmaShield(target));
+		new PlasmaShield(target);
 	}
 }

@@ -25,7 +25,7 @@ public class PlayAnimation extends Animation {
 			GuiCard guiCard = GuiCard.get(creature);
 			float x= -creatures.size()/2 + i;
 			System.out.println(x);
-			guiCard.startMoving(new Vector3f(2*x*mirrow,0,-3*mirrow));
+			guiCard.startMoving(new Vector3f(2*x*mirrow,0,-2*mirrow));
 			cards.add(guiCard);
 			i++;
 		}
@@ -34,7 +34,6 @@ public class PlayAnimation extends Animation {
 		for(Card cardInHand: hand) {
 			GuiCard guiCard = GuiCard.get(cardInHand);
 			float x= -hand.size()/2f + i;
-			System.out.println(new Vector3f(x*mirrow,0,-6.5f*mirrow));
 			guiCard.startMoving(new Vector3f(x*mirrow,0,-6.5f*mirrow));
 			i++;
 		}

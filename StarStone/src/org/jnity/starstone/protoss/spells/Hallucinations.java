@@ -2,7 +2,6 @@ package org.jnity.starstone.protoss.spells;
 
 import org.jnity.starstone.cards.CreatureCard;
 import org.jnity.starstone.cards.SpellCard;
-import org.jnity.starstone.events.GameListener;
 import org.jnity.starstone.modifiers.Invulnerability;
 import org.jnity.starstone.protoss.creatures.Hallucination;
 
@@ -23,7 +22,7 @@ public class Hallucinations extends SpellCard {
         if(size < 7) {
             getOwner().putCreature(new Hallucination(target), position + 1);
             getOwner().putCreature(new Hallucination(target), position);
-            target.addModifier(new Invulnerability(target));
+            new Invulnerability(target);
         }
     }
 }

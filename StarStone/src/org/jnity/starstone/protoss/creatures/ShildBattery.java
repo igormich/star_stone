@@ -27,7 +27,7 @@ public class ShildBattery extends CreatureCard implements GameListener {
 	public void on(GameEvent gameEvent, Card card, CreatureCard nothing) {
 		if(GameEvent.END_OF_TURN == gameEvent && card.equals(getOwner())) {
 			List<CreatureCard> neighbors = getOwner().getCreaturesNear(this);
-			neighbors.forEach(c -> c.addModifier(new PlasmaShield(c)));
+			neighbors.forEach(c -> new PlasmaShield(c));
 			Debug.print("give shild to " + neighbors);
 		}
 	}

@@ -22,10 +22,10 @@ public interface Modifier {
 		return value;
 	}
 
-	default int modifyDamage(int value, CreatureCard creatureCard) {
+	default int modifyDamage(int value, CreatureCard creatureCard, Card sourse) {
 		return value;
 	}
-	default int modifyHeal(int value, CreatureCard creatureCard) {
+	default int modifyHeal(int value, CreatureCard creatureCard, Card sourse) {
 		return value;
 	}
 

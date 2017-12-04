@@ -1,5 +1,16 @@
 package org.jnity.starstone.gui;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -77,6 +88,7 @@ public class GuiCard extends Object3d {
 	private float time = 2;
 	private Card card;
 	private Texture2D faceTex;
+	private Texture2D aboutTex;
 
 	volatile protected Vector3f startTranslation;
 	volatile protected Vector3f endTranslation;
@@ -85,6 +97,8 @@ public class GuiCard extends Object3d {
 		this.card = card;
 		try {
 			faceTex = new Texture2D(card.getID().toLowerCase() + ".jpg", false);
+			BufferedImage about = buildText(card);
+			aboutTex = new Texture2D(about, false);
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
@@ -101,14 +115,14 @@ public class GuiCard extends Object3d {
 			@Override
 			public void render(RenderContex renderContex, Object3d owner) {
 				Card card = GuiCard.this.getCard();
-				boolean onDesk = card.onDesk();
-				//*
+				boolean renderSmall = card.onDesk() && (GuiCard.this != mouseProcess.underCursor || mouseProcess.state != MouseProcess.State.WAIT);
+				// *
 				if (card instanceof CreatureCard) {
 
 					CreatureCard cCard = (CreatureCard) card;
 					cardMesh.setMaterialName("creatureShader");
-					
-					if (onDesk) {
+
+					if (renderSmall) {
 						float target = 0;
 						if ((mouseProcess.state == State.SELECT_TARGET_FOR_ATACK)
 								&& (mouseProcess.selected.getCard().canAtack(cCard))) {
@@ -134,15 +148,17 @@ public class GuiCard extends Object3d {
 						compactCreatureShader.setUniform(renderContex.getTime(), "time");
 					} else {
 						creatureShader.addTexture(faceTex, "faceTex");
+						creatureShader.addTexture(aboutTex, "aboutTex");
 						creatureShader.setUniform(new Vector4f(card.getPriceInMineral(), card.getPriceInGas(),
 								cCard.getPower(), cCard.getCurrentHits()), "stats");
 					}
 				} else {
 					cardMesh.setMaterialName("cardShader");
 					cardShader.addTexture(faceTex, "faceTex");
+					cardShader.addTexture(aboutTex, "aboutTex");
 					cardShader.setUniform(new Vector4f(card.getPriceInMineral(), card.getPriceInGas(), 0, 0), "stats");
-				}//*/
-				if (onDesk) {
+				} // */
+				if (renderSmall) {
 					creatureMesh.render(renderContex, owner);
 				} else {
 					cardMesh.render(renderContex, owner);
@@ -151,6 +167,86 @@ public class GuiCard extends Object3d {
 
 		});
 		setName(card.getName());
+	}
+
+	private static BufferedImage buildText(Card card) {
+		int WIDTH = 400;
+		int HEIGTH = 543;
+		BufferedImage result = new BufferedImage(WIDTH, HEIGTH, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = (Graphics2D) result.getGraphics();
+
+		String name = card.getName();
+		
+		try {
+			Font font = Font.createFont(Font.TRUETYPE_FONT, new File("font.ttf"));
+			g.setFont(font);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		float fontSize = 48f;
+		g.setFont(g.getFont().deriveFont(fontSize).deriveFont(Font.BOLD | Font.ITALIC));
+		while (g.getFontMetrics().stringWidth(name) > WIDTH * 0.75) {
+			fontSize -= 2;
+			g.setFont(g.getFont().deriveFont(fontSize));
+		}
+		AffineTransform baseTransform = g.getTransform();
+		g.translate(WIDTH / 2 - g.getFontMetrics().stringWidth(name) / 2, 300);
+		FontRenderContext frc = g.getFontRenderContext();
+		g.setStroke(new BasicStroke(2.0f));
+		//TextLayout textTl = new TextLayout(name, g.getFont(), frc);
+		//Shape outline = textTl.getOutline(null);
+		
+		GlyphVector gv = g.getFont().createGlyphVector(frc, name);
+		int length = gv.getNumGlyphs();
+        for (int i = 0; i < length; i++) {
+            Point2D p = gv.getGlyphPosition(i);
+            double theta = (p.getX()-WIDTH/2)/(WIDTH*2);
+            AffineTransform at = new AffineTransform();
+            at.rotate(theta);
+            at.translate(0, -theta*50);
+            Shape glyph = gv.getGlyphOutline(i);
+            Shape outline = at.createTransformedShape(glyph);
+            g.setColor(Color.WHITE);
+    		g.fill(outline);
+    		g.setColor(Color.BLACK);
+    		g.draw(outline);
+        }
+		/*g.setColor(Color.WHITE);
+		g.setStroke(new BasicStroke(2.0f));
+		g.fill(outline);
+		g.setColor(Color.BLACK);
+		g.draw(outline);*/
+
+		g.setTransform(baseTransform);
+		g.setFont(g.getFont().deriveFont(36f).deriveFont(0));
+		g.setColor(Color.BLACK);
+		String desk = card.getDescription();
+		int posY = 370;
+		while (desk.length() > 0) {
+			if (g.getFontMetrics().stringWidth(desk) < WIDTH * 0.75) {
+				g.drawString(desk, WIDTH / 2 - g.getFontMetrics().stringWidth(desk) / 2, posY);
+				desk = "";
+			} else {
+				int split = desk.indexOf(" ");
+				while (desk.indexOf(" ", split + 1) > 0 && (g.getFontMetrics()
+						.stringWidth(desk.substring(0, desk.indexOf(" ", split + 1))) < WIDTH * 0.8)) {
+					split = desk.indexOf(" ", split + 1);
+				}
+				if (split > 0) {
+					String textToDraw = desk.substring(0, split);
+					g.drawString(textToDraw, WIDTH / 2 - g.getFontMetrics().stringWidth(textToDraw) / 2, posY);
+					posY += g.getFontMetrics().getHeight();
+					desk = desk.substring(split + 1);
+				} else {
+					String textToDraw = desk;
+					g.drawString(desk, WIDTH / 2 - g.getFontMetrics().stringWidth(textToDraw) / 2, posY);
+					desk = "";
+				}
+
+			}
+		}
+		return result;
 	}
 
 	public static GuiCard get(Card card) {

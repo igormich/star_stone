@@ -15,6 +15,6 @@ public class ShadowScreen extends SpellCard {
     @Override
     public void play(CreatureCard target){
         super.play(target);
-        getOwner().getCreatures().forEach(creatureCard -> creatureCard.addModifier(new Invisibility(creatureCard)));
+        getOwner().getCreatures().forEach(creatureCard -> new Invisibility(creatureCard));
     }
 }

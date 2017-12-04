@@ -12,6 +12,7 @@ public class TurnAttackBuff extends CreatureModifier implements GameListener{
     public TurnAttackBuff(CreatureCard target, int powerBuff) {
         super(target);
         this.powerBuff = powerBuff;
+        target.getGame().addListener(this);
     }
 
     @Override
@@ -25,6 +26,5 @@ public class TurnAttackBuff extends CreatureModifier implements GameListener{
 			getTarget().removeModifier(this);
 			getTarget().getGame().removeListener(this);
 		}
-		
 	}
 }

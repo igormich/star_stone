@@ -15,6 +15,8 @@ public class CardShader extends JFragmentShader {
 	@Uniform
 	Sampler2D faceTex;
 	@Uniform
+	Sampler2D aboutTex;
+	@Uniform
 	Sampler2D numbersTex;
 
 	@Uniform
@@ -49,6 +51,9 @@ public class CardShader extends JFragmentShader {
 			number = texture2D(numbersTex, mul(costText, vec2(1f,0.1f)));
 		}
 		color = add(mul(color, 1-number.a), number);
+		
+		Vec4 aboutColor = texture2D(aboutTex, texCoord.st);
+		color = add(mul(color, 1-aboutColor.a), aboutColor);
 		
 		gl_FragColor = color;
 	}

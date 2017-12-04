@@ -11,7 +11,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.jnity.starstone.core.ModifierContainer;
 import org.jnity.starstone.core.Player;
 import org.jnity.starstone.core.TextHolder;
-import org.jnity.starstone.events.GameEvent;
 import org.jnity.starstone.modifiers.Defender;
 import org.jnity.starstone.modifiers.Invisibility;
 import org.jnity.starstone.modifiers.Invulnerability;

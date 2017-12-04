@@ -6,7 +6,6 @@ import java.util.List;
 import org.jnity.starstone.cards.Card;
 import org.jnity.starstone.cards.CreatureCard;
 import org.jnity.starstone.core.Game;
-import org.jnity.starstone.core.Player;
 import org.jnity.starstone.events.GameEvent;
 import org.jnity.starstone.events.GameListener;
 

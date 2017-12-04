@@ -21,7 +21,7 @@ public class ShadowScythe extends CreatureCard {
     public void play(CreatureCard target){
         super.play(target);
         if(getOwner().getCountPlayedCard() > 0 && count == 0) {
-            addModifier(new Buff(this, powerBuff, hitsBuff));
+            new Buff(this, powerBuff, hitsBuff);
             count++;
         }
     }

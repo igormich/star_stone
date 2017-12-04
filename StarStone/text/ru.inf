@@ -8,9 +8,9 @@ ZEALOT=Зилот
 ZEALOT_DESK=Плазменный щит
 ZEALOT_ABOUT="Жизнь за Айур!"
 SHILD_BATTERY=Батарея щитов
-SHILD_BATTERY_DESK=В конце хода даёт существам справа и слева плазменный щит
+SHILD_BATTERY_DESK=В конце хода даёт существам рядом плазменный щит
 SHILD_BATTERY_ABOUT=?
-RECHARGE_SHIELDS=Перезарядка щитов
+RECHARGE_SHIELDS=Перезарядка
 RECHARGE_SHIELDS_DESK=Даёт существу плазменный щит
 RECHARGE_SHIELDS_ABOUT=?Что бы у любви не садилась батарейка?
 
@@ -18,7 +18,7 @@ CENTURION=Центурион
 CENTURION_DESK=Невидимость
 CENTURION_ABOUT="Я щит сумерек!"
 DARKSTALKER=Сталкер
-DARKSTALKER_DESK=
+DARKSTALKER_DESK=Серия приёмов: наносит существу 2 урона.
 DARKSTALKER_ABOUT=«Я здесь, в тени».
 
 

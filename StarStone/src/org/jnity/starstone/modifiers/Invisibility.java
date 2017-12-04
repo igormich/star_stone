@@ -5,7 +5,7 @@ import org.jnity.starstone.cards.CreatureCard;
 import org.jnity.starstone.events.GameEvent;
 import org.jnity.starstone.events.GameListener;
 
-public class Invisibility extends CreatureModifier implements GameListener{
+public class Invisibility extends CreatureModifier implements GameListener {
 
     public Invisibility(CreatureCard target) {
         super(target);
@@ -15,10 +15,12 @@ public class Invisibility extends CreatureModifier implements GameListener{
 	@Override
 	public void on(GameEvent gameEvent, Card card, CreatureCard target) {
 		if((gameEvent==GameEvent.ATACKS) && card.equals(getTarget())){
-			target.getGame().removeListener(this);
-			target.removeModifier(this);
+			getTarget().getGame().removeListener(this);
+			getTarget().removeModifier(this);
 		}
 	}
-    
-
+	@Override
+	public boolean canBeDuplicated() {
+		return false;
+	}
 }

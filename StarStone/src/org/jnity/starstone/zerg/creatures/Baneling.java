@@ -1,7 +1,6 @@
 package org.jnity.starstone.zerg.creatures;
 
 import org.jnity.starstone.cards.CreatureCard;
-import org.jnity.starstone.events.GameListener;
 
 public class Baneling extends CreatureCard {
     private static final long serialVersionUID = -930875945425631349L;

@@ -25,7 +25,7 @@ public class Queen extends CreatureCard implements GameListener{
         List<CreatureCard> creatures = getOwner().getCreatures();
         for(int i = 0; i < creatures.size(); i++){
             if(!creatures.get(i).equals(this))
-                creatures.get(i).addModifier(new Buff(creatures.get(i), attackBuff, 0));
+                new Buff(creatures.get(i), attackBuff, 0);
         }
         Debug.print("give attackBuff");
     }
@@ -37,7 +37,7 @@ public class Queen extends CreatureCard implements GameListener{
                 && card instanceof CreatureCard
                 && card.getOwner().equals(this.getOwner())){
 
-            card.addModifier(new Buff((CreatureCard) card, attackBuff, 0));
+            new Buff((CreatureCard) card, attackBuff, 0);
         }
 
         if(GameEvent.DIES == gameEvent && card.equals(this)){

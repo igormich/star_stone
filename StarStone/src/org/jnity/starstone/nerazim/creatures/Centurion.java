@@ -14,6 +14,6 @@ public class Centurion extends CreatureCard {
     @Override
     public void play(CreatureCard target) {
         super.play(target);
-        addModifier(new Invisibility(this));
+        new Invisibility(this);
     }
 }

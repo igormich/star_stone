@@ -13,7 +13,7 @@ public class Hydralisk extends CreatureCard{
     @Override
     public void play(CreatureCard target){
         super.play(target);
-        if(target != null) target.takeDamage(2);
+        if(target != null) target.takeDamage(2, this);
     }
 
 }

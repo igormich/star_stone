@@ -10,7 +10,7 @@ public class AdeptIllusion extends CreatureCard{
     public AdeptIllusion(CreatureCard target) {
         super("ADEPTILLUSION", 0, 0, target.getCurrentHits(), target.getPower());
 
-        addModifier(new Illusion(this));
+       new Illusion(this);
     }
 
 }

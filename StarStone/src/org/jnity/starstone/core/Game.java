@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.jnity.starstone.cards.Card;
@@ -100,9 +99,9 @@ public class Game implements Serializable {
 	public void battle(CreatureCard card, CreatureCard target) {
 		int atackerPower = card.getPower();
 		int defenderPower = target.getPower();
-		card.takeDamage(defenderPower);
-		target.takeDamage(atackerPower);
-		card.addModifier(new CombatFatigue(card));
+		card.takeDamage(defenderPower,target);
+		target.takeDamage(atackerPower, card);
+		new CombatFatigue(card);
 		emit(GameEvent.ATACKS, card, target);
 		emit(GameEvent.DEFENDED, target, card);
 	}

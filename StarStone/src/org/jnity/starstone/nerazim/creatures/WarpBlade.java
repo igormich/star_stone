@@ -15,6 +15,6 @@ public class WarpBlade extends CreatureCard {
     public void play(CreatureCard target){
         super.play(target);
         if(getOwner().getCountPlayedCard() > 0)
-            addModifier(new Invisibility(this));
+            new Invisibility(this);
     }
 }

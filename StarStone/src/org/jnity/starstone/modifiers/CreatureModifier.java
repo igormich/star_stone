@@ -13,6 +13,7 @@ public class CreatureModifier implements Modifier, Serializable{
 
 	public CreatureModifier(CreatureCard target) {
 		this.target = target;
+		target.addModifier(this);
 	}
 
 	public CreatureCard getTarget() {

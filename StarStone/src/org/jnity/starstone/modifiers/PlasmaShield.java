@@ -1,5 +1,6 @@
 package org.jnity.starstone.modifiers;
 
+import org.jnity.starstone.cards.Card;
 import org.jnity.starstone.cards.CreatureCard;
 
 public class PlasmaShield extends CreatureModifier  {
@@ -9,7 +10,7 @@ public class PlasmaShield extends CreatureModifier  {
 	}
 
 	@Override
-	public int modifyDamage(int value, CreatureCard creatureCard) {
+	public int modifyDamage(int value, CreatureCard creatureCard, Card sourse) {
 		if (value>0) {
 			getTarget().removeModifier(this);
 		}

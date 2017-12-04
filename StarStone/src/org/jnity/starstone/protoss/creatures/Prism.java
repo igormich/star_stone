@@ -13,7 +13,7 @@ public class Prism extends CreatureCard{
     @Override
     public void play(CreatureCard target){
         super.play(target);
-        target.heal(target.getMaxHits()-target.getCurrentHits());
-        target.addModifier(new Buff(target, attackBuff, 0));
+        target.heal(target.getMaxHits()-target.getCurrentHits(),this);
+        new Buff(target, attackBuff, 0);
     }
 }

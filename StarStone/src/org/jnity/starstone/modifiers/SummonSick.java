@@ -21,5 +21,8 @@ public class SummonSick extends CreatureModifier implements GameListener {
 	public boolean modifyCanAtack(boolean value, CreatureCard creatureCard) {
 		return false;
 	}
-	
+	@Override
+	public boolean canBeDuplicated() {
+		return false;
+	}
 }

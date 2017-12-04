@@ -39,16 +39,16 @@ public class CreatureCard extends Card {
 		return result;
 	}
 
-	public int takeDamage(int damage) {
+	public int takeDamage(int damage, Card sourse) {
 		for (Modifier modifier : getModifiers())
-			damage = modifier.modifyDamage(damage, this);
+			damage = modifier.modifyDamage(damage, this, sourse);
 		changeCurrentHits(-damage);
 		return damage;
 	}
 
-	public int heal(int healingPower) {
+	public int heal(int healingPower, Card sourse) {
 		for (Modifier modifier : getModifiers())
-			healingPower = modifier.modifyHeal(healingPower, this);
+			healingPower = modifier.modifyHeal(healingPower, this, sourse);
 		changeCurrentHits(currentHits);
 		return healingPower;
 	}

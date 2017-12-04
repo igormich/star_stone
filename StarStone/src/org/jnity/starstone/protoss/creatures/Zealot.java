@@ -13,6 +13,6 @@ public class Zealot extends CreatureCard{
     @Override
     public void play(CreatureCard target) {
         super.play(target);
-        addModifier(new PlasmaShield(this));
+        new PlasmaShield(this);
     }
 }
