@@ -36,8 +36,8 @@ public class LocalNetworkRunnerWithBot {
 		Thread botThread = new Thread(() -> {
 			try {
 				Thread.sleep(2000);
-				Player p1 = new Player("Второй игрок", deck1);
-				GameClient gameClient = new GameClient("Второй игрок",0, "localhost");
+				Player p1 = new Player("123", deck1);
+				GameClient gameClient = new GameClient("123",0, "localhost");
 				new PassBot(gameClient, p1);
 				gameClient.start();
 			} catch (Exception e) {
@@ -47,9 +47,9 @@ public class LocalNetworkRunnerWithBot {
 		botThread.setDaemon(true);
 		botThread.start();
 		
-		Player p1 = new Player("Первый игрок", deck1);
-		GameClient gameClient = new GameClient("Первый игрок",0, "localhost");
-		//Player p2 = new Player("Второй второй", deck1);
+		Player p1 = new Player("321", deck1);
+		GameClient gameClient = new GameClient("321",0, "localhost");
+		//Player p2 = new Player("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", deck1);
 		
 		//Game game = new Game(p1, p2);
 		new GameGui(gameClient, p1);

@@ -29,7 +29,7 @@ public class GameGui extends Thread implements GameListener {
 	public static final String SUMMON_SICK = "SUMMON_SICK";
 	public static final String AFTER_ATACK = "AFTER_ATACK";
 	public static final String CANT_ATACK = "CANT_ATACK";
-	
+	public static final String NO_TARGETS = "NO_TARGETS";
 	public static final String NEED_MORE_RESOURSES = "NEED_MORE_RESOURSES";
 	private final ConcurrentLinkedQueue<StoredEvent> events = new ConcurrentLinkedQueue<>();
 	private Game game;
@@ -81,6 +81,7 @@ public class GameGui extends Thread implements GameListener {
 			while(!game.isReady());
 			while (!Display.isCloseRequested()) {
 				float deltaTime = 0;
+				Display.setTitle(""+(System.currentTimeMillis() - sysTime) + " " + scene.getRoot().getChildren().size());
 				//System.out.println(System.currentTimeMillis() - sysTime);
 				if (System.currentTimeMillis() - sysTime < 1000) {
 					deltaTime = (System.currentTimeMillis() - sysTime) / 1000f;

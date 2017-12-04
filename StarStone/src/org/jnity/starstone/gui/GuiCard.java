@@ -28,17 +28,17 @@ import materials.Texture2D;
 import properties.Mesh;
 import properties.Property3d;
 
-public class GuiCard extends Object3d{
+public class GuiCard extends Object3d {
 
-	private static Map<Card, GuiCard> card2card= new HashMap<>();
+	private static Map<Card, GuiCard> card2card = new HashMap<>();
 	private static Shader cardShader;
 	private static Shader creatureShader;
 	private static Mesh cardMesh;
 	private static Mesh creatureMesh;
 	private static Shader compactCreatureShader;
-	
+
 	public static MouseProcess mouseProcess;
-	
+
 	public static void init(MaterialLibrary materialLibrary) throws IOException {
 		cardMesh = CardMeshBuilder.createCardMesh();
 		creatureMesh = CardMeshBuilder.createCreatureMesh();
@@ -56,13 +56,13 @@ public class GuiCard extends Object3d{
 		cardShader.addTexture(numbers, "numbersTex");
 		creatureShader.addTexture(numbers, "numbersTex");
 		compactCreatureShader.addTexture(numbers, "numbersTex");
-		
+
 		cardShader.setBlendMode(SimpleMaterial.ALPHATEST50);
 		compactCreatureShader.setBlendMode(SimpleMaterial.ALPHATEST50);
-		//cardShader.setzWrite(false);
+		// cardShader.setzWrite(false);
 		creatureShader.setBlendMode(SimpleMaterial.ALPHATEST50);
-		//creatureShader.setzWrite(false);
-		
+		// creatureShader.setzWrite(false);
+
 		Texture shadow = new Texture2D("eff_shadow.jpg");
 		Texture shield = new Texture2D("eff_shield.jpg");
 		compactCreatureShader.addTexture(shadow, "shadowTex");
@@ -73,7 +73,7 @@ public class GuiCard extends Object3d{
 		materialLibrary.addMaterial("creatureShader", creatureShader);
 		materialLibrary.addMaterial("compactCreatureShader", compactCreatureShader);
 	}
-	
+
 	private float time = 2;
 	private Card card;
 	private Texture2D faceTex;
@@ -84,15 +84,15 @@ public class GuiCard extends Object3d{
 	public GuiCard(Card card) {
 		this.card = card;
 		try {
-			faceTex = new Texture2D(card.getID().toLowerCase() +".jpg", false);
+			faceTex = new Texture2D(card.getID().toLowerCase() + ".jpg", false);
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 		card2card.put(card, this);
-		
+
 		add(new Property3d() {
-			
+
 			@Override
 			public Property3d fastClone() {
 				return this;
@@ -101,22 +101,30 @@ public class GuiCard extends Object3d{
 			@Override
 			public void render(RenderContex renderContex, Object3d owner) {
 				Card card = GuiCard.this.getCard();
-				if(card instanceof CreatureCard) {
+				boolean onDesk = card.onDesk();
+				//*
+				if (card instanceof CreatureCard) {
+
 					CreatureCard cCard = (CreatureCard) card;
 					cardMesh.setMaterialName("creatureShader");
-					if(card.onDesk()) {
+					
+					if (onDesk) {
 						float target = 0;
-						if ((mouseProcess.state == State.SELECT_TARGET_FOR_ATACK) && (mouseProcess.selected.getCard().canAtack(cCard))) {
+						if ((mouseProcess.state == State.SELECT_TARGET_FOR_ATACK)
+								&& (mouseProcess.selected.getCard().canAtack(cCard))) {
 							target = 1;
 						}
-						if ((mouseProcess.state == State.PLAY_SPELL_WITH_TARGET) && (mouseProcess.selected.getCard().isValidTarget(cCard))) {
+						if ((mouseProcess.state == State.PLAY_SPELL_WITH_TARGET)
+								&& (mouseProcess.selected.getCard().isValidTarget(cCard))) {
 							target = 1;
 						}
-						if ((mouseProcess.state == State.SELECT_TARGET_FOR_BATLECRY) && (mouseProcess.creatureWithTarget.isValidTarget(cCard))) {
+						if ((mouseProcess.state == State.SELECT_TARGET_FOR_BATLECRY)
+								&& (mouseProcess.creatureWithTarget.isValidTarget(cCard))) {
 							target = 1;
 						}
 						compactCreatureShader.addTexture(faceTex, "faceTex");
-						compactCreatureShader.setUniform(new Vector4f(target, 0, cCard.getPower(), cCard.getCurrentHits()), "stats");
+						compactCreatureShader
+								.setUniform(new Vector4f(target, 0, cCard.getPower(), cCard.getCurrentHits()), "stats");
 						Vector4f modifiers = new Vector4f();
 						if (card.getModifiers().stream().anyMatch(m -> m.getClass().equals(PlasmaShield.class)))
 							modifiers.x = 0.5f;
@@ -126,20 +134,21 @@ public class GuiCard extends Object3d{
 						compactCreatureShader.setUniform(renderContex.getTime(), "time");
 					} else {
 						creatureShader.addTexture(faceTex, "faceTex");
-						creatureShader.setUniform(new Vector4f(card.getPriceInMineral(), card.getPriceInGas(), cCard.getPower(), cCard.getCurrentHits()), "stats");
+						creatureShader.setUniform(new Vector4f(card.getPriceInMineral(), card.getPriceInGas(),
+								cCard.getPower(), cCard.getCurrentHits()), "stats");
 					}
 				} else {
 					cardMesh.setMaterialName("cardShader");
 					cardShader.addTexture(faceTex, "faceTex");
 					cardShader.setUniform(new Vector4f(card.getPriceInMineral(), card.getPriceInGas(), 0, 0), "stats");
-				}
-				if(card.onDesk()) {
+				}//*/
+				if (onDesk) {
 					creatureMesh.render(renderContex, owner);
 				} else {
 					cardMesh.render(renderContex, owner);
 				}
 			}
-			
+
 		});
 		setName(card.getName());
 	}
@@ -151,19 +160,21 @@ public class GuiCard extends Object3d{
 	public boolean isMovingFinished() {
 		return time > 1;
 	}
+
 	public float getTime() {
 		return Math.min(time, 1);
 	}
+
 	@Override
 	public void tick(float deltaTime, float globalTime) {
 		super.tick(deltaTime, globalTime);
-		time+=deltaTime;
-		if(!isMovingFinished()) {
-			getPosition().setTranslation(startTranslation.x * (1- getTime()) + endTranslation.x*getTime(), 
-									 	 startTranslation.y * (1- getTime()) + endTranslation.y*getTime(),
-									 	 startTranslation.z * (1- getTime()) + endTranslation.z*getTime());
+		time += deltaTime;
+		if (!isMovingFinished()) {
+			getPosition().setTranslation(startTranslation.x * (1 - getTime()) + endTranslation.x * getTime(),
+					startTranslation.y * (1 - getTime()) + endTranslation.y * getTime(),
+					startTranslation.z * (1 - getTime()) + endTranslation.z * getTime());
 		} else {
-			if(endTranslation!=null) {
+			if (endTranslation != null) {
 				getPosition().setTranslation(endTranslation);
 			}
 		}
@@ -190,6 +201,5 @@ public class GuiCard extends Object3d{
 	public static void all(Consumer<GuiCard> cardAction) {
 		card2card.values().forEach(cardAction);
 	}
-
 
 }
