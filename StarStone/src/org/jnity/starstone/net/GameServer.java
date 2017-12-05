@@ -15,11 +15,8 @@ import org.jnity.starstone.core.Player;
 import org.jnity.starstone.events.GameEvent;
 import org.jnity.starstone.events.GameListener;
 import org.jnity.starstone.gui.StoredEvent;
-import org.jnity.starstone.nerazim.creatures.Centurion;
-import org.jnity.starstone.nerazim.creatures.DarkStalker;
-import org.jnity.starstone.protoss.creatures.ShieldRecharge;
-import org.jnity.starstone.protoss.creatures.ShildBattery;
-import org.jnity.starstone.protoss.creatures.Zealot;
+import org.jnity.starstone.terran.creatures.FireBat;
+import org.jnity.starstone.terran.creatures.Marine;
 
 public class GameServer extends Thread implements GameListener {
 
@@ -99,13 +96,10 @@ public class GameServer extends Thread implements GameListener {
 	private List<Card> getDeckFor(String name1, int deckName) {
 		List<Card> deck1 = new ArrayList<>();
 		
-		deck1.add(new ShildBattery());
-		deck1.add(new ShildBattery());
-		deck1.add(new Zealot());
-		deck1.add(new DarkStalker());
-		deck1.add(new ShieldRecharge());
-		deck1.add(new Centurion());
-		deck1.add(new Zealot());
+		deck1.add(new FireBat());
+		deck1.add(new Marine());
+		deck1.add(new FireBat());
+		deck1.add(new Marine());
 		return deck1;
 	}
 

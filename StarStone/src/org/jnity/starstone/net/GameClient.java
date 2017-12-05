@@ -57,21 +57,17 @@ public class GameClient extends Game implements Runnable {
 			oos.flush();
 			ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
 			while (true) {
-				// if(ois.available()>0) {
 				try {
 					StoredEvent event = (StoredEvent) ois.readObject();
 					Game game = event.getGame();
 					assigneToThis(game);
 					super.emit(event.getType(), event.getCard(), event.getTarget());
-					// }
 				} catch (IOException | ClassNotFoundException e) {
 					e.printStackTrace();
-					System.out.println(player.getID());
 				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.out.println(player.getID());
 		}
 	}
 

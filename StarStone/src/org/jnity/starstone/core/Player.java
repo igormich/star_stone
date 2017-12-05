@@ -10,6 +10,7 @@ import org.jnity.starstone.cards.SpellCard;
 import org.jnity.starstone.events.GameEvent;
 import org.jnity.starstone.events.GameListener;
 import org.jnity.starstone.modifiers.Modifier;
+import org.jnity.starstone.modifiers.SummonSick;
 
 public class Player extends CreatureCard implements GameListener {
 
@@ -29,7 +30,7 @@ public class Player extends CreatureCard implements GameListener {
 	private ArrayList<Card> deck = new ArrayList<>();
 	private int maxMinerals = 0;
 	private int currentMinerals;
-	private int maxVespenGase = 0;
+	private int maxVespenGase = 1;
 	private int currentVespenGase;
 	private int playedCardCount;
 
@@ -99,8 +100,7 @@ public class Player extends CreatureCard implements GameListener {
 		hand.remove(card);
 
 		if (card instanceof CreatureCard) {
-			putCreature(card, position);
-			card.setOnDesk(true);
+			putCreature((CreatureCard) card, position);
 		}
 		currentMinerals -= card.getPriceInMineral();
 		currentVespenGase -= card.getPriceInGas();
@@ -109,13 +109,20 @@ public class Player extends CreatureCard implements GameListener {
 		getGame().emit(GameEvent.PLAY, card);
 	}
 
-	public void putCreature(Card card, int position) {
-		if (creatures.size() < MAX_CREATURE_COUNT) {
-			if (position > -1 && position < MAX_CREATURE_COUNT)
-				creatures.add(position, (CreatureCard) card);
+	public void putCreature(CreatureCard card, int position) {
+		if(putCreatureInternal(card, position)) {
+			getGame().emit(GameEvent.PUT, card);
 		}
 	}
-
+	private boolean putCreatureInternal(CreatureCard card, int position) {
+		if (creatures.size() < MAX_CREATURE_COUNT && position > -1 && position < MAX_CREATURE_COUNT) {
+				addModifier(new SummonSick(card));
+				card.setOnDesk(true);
+				creatures.add(position, card);
+				return true;
+			}
+		return false;
+	}
 	public boolean hasResoursesFor(Card card) {
 		return getCurrentMinerals() >= card.getPriceInMineral() && getCurrentVespenGase() >= card.getPriceInGas();
 	}
@@ -196,6 +203,8 @@ public class Player extends CreatureCard implements GameListener {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
+		if (obj == null)
+			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		Player other = (Player) obj;

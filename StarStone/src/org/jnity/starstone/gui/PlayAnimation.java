@@ -6,7 +6,6 @@ import java.util.List;
 import org.jnity.starstone.cards.Card;
 import org.jnity.starstone.cards.CreatureCard;
 import org.jnity.starstone.core.Player;
-import org.lwjgl.util.vector.Vector3f;
 
 import base.Scene;
 
@@ -18,13 +17,17 @@ public class PlayAnimation extends Animation {
 		if (!card.getOwner().equals(gamer)) {
 			mirrow = -1;
 		}
-		List<CreatureCard> creatures = card.getOwner().getCreatures();
+		cards = new ArrayList<>();
+		for(CreatureCard creature: card.getOwner().getCreatures()) {
+			GuiCard guiCard = GuiCard.get(creature);
+			cards.add(guiCard);
+		}
+		/*List<CreatureCard> creatures = card.getOwner().getCreatures();
 		cards = new ArrayList<>();
 		int i = 0;
 		for(CreatureCard creature: creatures) {
 			GuiCard guiCard = GuiCard.get(creature);
-			float x= -creatures.size()/2 + i;
-			System.out.println(x);
+			float x= -creatures.size()/2 + i + (1 - creatures.size() % 2) * 0.5f;
 			guiCard.startMoving(new Vector3f(2*x*mirrow,0,-2*mirrow));
 			cards.add(guiCard);
 			i++;
@@ -36,7 +39,9 @@ public class PlayAnimation extends Animation {
 			float x= -hand.size()/2f + i;
 			guiCard.startMoving(new Vector3f(x*mirrow,0,-6.5f*mirrow));
 			i++;
-		}
+		}*/
+		Animation.regroupCreatures(card.getOwner(), mirrow);
+		Animation.regroupHand(card.getOwner(), mirrow);
 	}
 	@Override
 	public boolean isFinished() {

@@ -1,15 +1,19 @@
-﻿MARINE=Морпех
-MARINE_DESK= 
-MARINE_ABOUT=?Посмотреть у Глена Кука
 ZERLING=Зерлинг
-ZERLING_DESK=Боевой крик, призывает второго зерлинга
+ZERLING_DESK=Боевой клич, призывает второго зерлинга
 ZERLING_ABOUT=Два по цене одного
+
+HYDRALISK=Гидралиск
+HYDRALISK=Боевой клич, наносит 2 урона
+HYDRALISK=Он не водяной, он кислотный.
+
 ZEALOT=Зилот
 ZEALOT_DESK=Плазменный щит
 ZEALOT_ABOUT="Жизнь за Айур!"
+
 SHILD_BATTERY=Батарея щитов
 SHILD_BATTERY_DESK=В конце хода даёт существам рядом плазменный щит
 SHILD_BATTERY_ABOUT=?
+
 RECHARGE_SHIELDS=Перезарядка
 RECHARGE_SHIELDS_DESK=Даёт существу плазменный щит
 RECHARGE_SHIELDS_ABOUT=?Что бы у любви не садилась батарейка?
@@ -34,7 +38,13 @@ SHADOWDANCE=Танец с тенями
 SHADOWDANCE_DESK=Даёт всем вашим существам с маскировкой +2 к атаке до конца хода.
 SHADOWDANCE_ABOUT=После джанги, начинается вьюга.
 
+MARINE=Морпех
+MARINE_DESK= 
+MARINE_ABOUT=?Посмотреть у Глена Кука
 
+FIREBAT=Поджигатель
+FIREBAT_DESK=Наносит урон существам рядом с целью.
+FIREBAT_ABOUT=Огоньку?
 
 SUMMON_SICK=Это существо сможет атаковать на следующий ход
 CANT_ATACK=Это существо не может атаковать

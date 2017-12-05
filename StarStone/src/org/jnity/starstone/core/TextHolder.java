@@ -17,6 +17,9 @@ public class TextHolder {
 		int n=1;
 		System.out.println(Charset.availableCharsets());
 		for(String line:Files.readAllLines(new File(fileName).toPath(), Charset.forName("UTF-8"))){
+			if(line.isEmpty()){
+				continue;
+			}
 			try{
 			String[] keyValue = line.split("=");
 			text.put(keyValue[0], keyValue[1]);

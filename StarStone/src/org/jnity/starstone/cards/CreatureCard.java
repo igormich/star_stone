@@ -2,7 +2,6 @@ package org.jnity.starstone.cards;
 
 import org.jnity.starstone.events.GameEvent;
 import org.jnity.starstone.modifiers.Modifier;
-import org.jnity.starstone.modifiers.SummonSick;
 
 public class CreatureCard extends Card {
 
@@ -42,23 +41,23 @@ public class CreatureCard extends Card {
 	public int takeDamage(int damage, Card sourse) {
 		for (Modifier modifier : getModifiers())
 			damage = modifier.modifyDamage(damage, this, sourse);
-		changeCurrentHits(-damage);
+		changeCurrentHits(-damage, sourse);
 		return damage;
 	}
 
 	public int heal(int healingPower, Card sourse) {
 		for (Modifier modifier : getModifiers())
 			healingPower = modifier.modifyHeal(healingPower, this, sourse);
-		changeCurrentHits(currentHits);
+		changeCurrentHits(currentHits, sourse);
 		return healingPower;
 	}
 
-	public void changeCurrentHits(int change) {
+	public void changeCurrentHits(int change, Card sourse) {
 		currentHits = Math.min(Math.max(0, currentHits + change), getMaxHits());
 		if(change<0)
-			getGame().emit(GameEvent.TAKE_DAMAGE, this);
+			getGame().emit(GameEvent.TAKE_DAMAGE, sourse, this);
 		if((change>0) && currentHits < getMaxHits())
-			getGame().emit(GameEvent.HEALED, null, this);
+			getGame().emit(GameEvent.HEALED, sourse, this);
 		if (currentHits == 0) 
 			die();
 	}
@@ -74,7 +73,6 @@ public class CreatureCard extends Card {
 	@Override
 	public void play(CreatureCard target) {
 		super.play(target);
-		addModifier(new SummonSick(this));
 	}
 	
 	public boolean canAtack() {

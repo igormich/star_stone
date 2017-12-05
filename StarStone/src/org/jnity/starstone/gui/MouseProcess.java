@@ -28,11 +28,10 @@ public class MouseProcess {
 	public Object3d underCursor;
 	public GuiCard selected;
 	private Vector3f basePos;
-	private Vector3f underCursorPos;
 	public Object3d endTurnButton;
 	public Game game;
 	public String player;
-	private Scene scene;
+	public Scene scene;
 	private Camera camera;
 	private Object3d place;
 	public State state = State.WAIT;
@@ -185,14 +184,15 @@ public class MouseProcess {
 			}
 		}
 		GuiCard.get(creatureWithTarget).startMoving(basePos);
-		int i = 0;
+		Animation.regroupCreatures(game.getPlayerByID(player), 1);
+		/*int i = 0;
 		List<CreatureCard> creatures = game.getPlayerByID(player).getCreatures();
 		for (CreatureCard creature : creatures) {
 			GuiCard guiCard = GuiCard.get(creature);
 			float x = -creatures.size() / 2 + i;
 			guiCard.startMoving(new Vector3f(2 * x, 0, -2));
 			i++;
-		}
+		}*/
 
 	}
 
@@ -259,14 +259,15 @@ public class MouseProcess {
 			}
 		} else {
 			selected.startMoving(basePos);
-			int i = 0;
+			Animation.regroupCreatures(game.getPlayerByID(player), 1);
+			/*(int i = 0;
 			List<CreatureCard> creatures = game.getPlayerByID(player).getCreatures();
 			for (CreatureCard creature : creatures) {
 				GuiCard guiCard = GuiCard.get(creature);
-				float x = -creatures.size() / 2 + i;
+				float x= -creatures.size()/2 + i + (1 - creatures.size() % 2) * 0.5f;
 				guiCard.startMoving(new Vector3f(2 * x, 0, -2));
 				i++;
-			}
+			}*/
 		}
 	}
 

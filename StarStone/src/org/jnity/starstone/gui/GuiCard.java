@@ -49,8 +49,9 @@ public class GuiCard extends Object3d {
 	private static Shader compactCreatureShader;
 
 	public static MouseProcess mouseProcess;
+	private static Font font;
 
-	public static void init(MaterialLibrary materialLibrary) throws IOException {
+	public static void init(MaterialLibrary materialLibrary) throws Exception {
 		cardMesh = CardMeshBuilder.createCardMesh();
 		creatureMesh = CardMeshBuilder.createCreatureMesh();
 		creatureMesh.setMaterialName("compactCreatureShader");
@@ -83,6 +84,7 @@ public class GuiCard extends Object3d {
 		materialLibrary.addMaterial("cardShader", cardShader);
 		materialLibrary.addMaterial("creatureShader", creatureShader);
 		materialLibrary.addMaterial("compactCreatureShader", compactCreatureShader);
+		font = Font.createFont(Font.TRUETYPE_FONT, new File("font.ttf"));
 	}
 
 	private float time = 2;
@@ -176,13 +178,7 @@ public class GuiCard extends Object3d {
 		Graphics2D g = (Graphics2D) result.getGraphics();
 
 		String name = card.getName();
-		
-		try {
-			Font font = Font.createFont(Font.TRUETYPE_FONT, new File("font.ttf"));
-			g.setFont(font);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		g.setFont(font);
 
 		float fontSize = 48f;
 		g.setFont(g.getFont().deriveFont(fontSize).deriveFont(Font.BOLD | Font.ITALIC));
@@ -191,7 +187,7 @@ public class GuiCard extends Object3d {
 			g.setFont(g.getFont().deriveFont(fontSize));
 		}
 		AffineTransform baseTransform = g.getTransform();
-		g.translate(WIDTH / 2 - g.getFontMetrics().stringWidth(name) / 2, 300);
+		g.translate(WIDTH / 2 - g.getFontMetrics().stringWidth(name) / 2, 317);
 		FontRenderContext frc = g.getFontRenderContext();
 		g.setStroke(new BasicStroke(2.0f));
 		//TextLayout textTl = new TextLayout(name, g.getFont(), frc);
@@ -201,10 +197,11 @@ public class GuiCard extends Object3d {
 		int length = gv.getNumGlyphs();
         for (int i = 0; i < length; i++) {
             Point2D p = gv.getGlyphPosition(i);
-            double theta = (p.getX()-WIDTH/2)/(WIDTH*2);
+            double theta = (p.getX()-WIDTH/2)/(WIDTH*3);
             AffineTransform at = new AffineTransform();
             at.rotate(theta);
-            at.translate(0, -theta*50);
+            at.translate(0, -theta*20);
+            at.translate(0, -p.getX()/10);
             Shape glyph = gv.getGlyphOutline(i);
             Shape outline = at.createTransformedShape(glyph);
             g.setColor(Color.WHITE);
@@ -250,7 +247,15 @@ public class GuiCard extends Object3d {
 	}
 
 	public static GuiCard get(Card card) {
-		return card2card.get(card);
+		if (card2card.containsKey(card)) {
+			return card2card.get(card);
+		} else {
+			GuiCard guicard = new GuiCard(card);
+			mouseProcess.scene.add(guicard);
+			card2card.put(card,guicard);
+			return guicard;
+		}
+		
 	}
 
 	public boolean isMovingFinished() {
