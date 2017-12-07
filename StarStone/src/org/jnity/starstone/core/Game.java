@@ -128,7 +128,9 @@ public class Game implements Serializable {
 		activePlayer.play(card,target,placePosition);
 	}
 	public Card getCardBySerial(int serial) {
-		return getAll().stream().filter(c -> c.getSerial() == serial).findAny().orElseGet(() -> null);
+		return getAll().stream()
+				.filter(c -> c.getSerial() == serial)
+				.findAny().orElseGet(() -> null);
 	}
 	public Card renewCard(Card card) {
 		Card found = getCardBySerial(card.getSerial());

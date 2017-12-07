@@ -147,8 +147,9 @@ public class Card extends ModifierContainer implements Cloneable, Serializable{
 	}
 
 	public boolean canAtack(CreatureCard target) {
-		if (!target.hasModifier(Defender.class)){
-			if (target.getOwner().getCreatures().stream().anyMatch(c ->c.hasModifier(Defender.class) && !c.hasModifier(Defender.class))) {
+		if (!target.hasModifier(Defender.class)) {
+			if (target.getOwner().getCreatures().stream()
+					.anyMatch(c -> c.hasModifier(Defender.class) && !c.hasModifier(Invisibility.class) && !c.hasModifier(Invulnerability.class))) {
 				return false;
 			}
 		}

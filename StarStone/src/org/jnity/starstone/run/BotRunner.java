@@ -10,6 +10,7 @@ import org.jnity.starstone.core.Game;
 import org.jnity.starstone.core.Player;
 import org.jnity.starstone.core.TextHolder;
 import org.jnity.starstone.gui.GameGui;
+import org.jnity.starstone.terran.creatures.Bunker;
 import org.jnity.starstone.terran.creatures.FireBat;
 import org.jnity.starstone.terran.creatures.Marine;
 import org.jnity.starstone.zerg.creatures.Zergling;
@@ -21,6 +22,7 @@ public class BotRunner {
 		
 		deck1.add(new FireBat());
 		deck1.add(new Marine());
+		deck1.add(new Bunker());
 		deck1.add(new FireBat());
 		deck1.add(new Marine());
 		

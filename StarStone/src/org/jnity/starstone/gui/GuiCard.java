@@ -23,6 +23,7 @@ import org.jnity.starstone.gui.shaders.CardShader;
 import org.jnity.starstone.gui.shaders.CompactCreatureShader;
 import org.jnity.starstone.gui.shaders.CreatureShader;
 import org.jnity.starstone.gui.shaders.SimpleVertexShader;
+import org.jnity.starstone.modifiers.Defender;
 import org.jnity.starstone.modifiers.Invisibility;
 import org.jnity.starstone.modifiers.PlasmaShield;
 import org.lwjgl.util.vector.Vector3f;
@@ -50,6 +51,8 @@ public class GuiCard extends Object3d {
 
 	public static MouseProcess mouseProcess;
 	private static Font font;
+	private static Texture2D compactCreatureBack;
+	private static Texture2D defenderCreatureBack;
 
 	public static void init(MaterialLibrary materialLibrary) throws Exception {
 		cardMesh = CardMeshBuilder.createCardMesh();
@@ -62,8 +65,8 @@ public class GuiCard extends Object3d {
 		cardShader.addTexture(backGround, "backTex");
 		backGround = new Texture2D("protoss.png");
 		creatureShader.addTexture(backGround, "backTex");
-		backGround = new Texture2D("u_protoss.png");
-		compactCreatureShader.addTexture(backGround, "backTex");
+		compactCreatureBack = new Texture2D("u_protoss.png");
+		defenderCreatureBack = new Texture2D("defender.png");
 		Texture numbers = new Texture2D("numbers.png");
 		cardShader.addTexture(numbers, "numbersTex");
 		creatureShader.addTexture(numbers, "numbersTex");
@@ -138,6 +141,12 @@ public class GuiCard extends Object3d {
 								&& (mouseProcess.creatureWithTarget.isValidTarget(cCard))) {
 							target = 1;
 						}
+						if(cCard.hasModifier(Defender.class)) {
+							compactCreatureShader.addTexture(defenderCreatureBack, "backTex");
+						} else {
+							compactCreatureShader.addTexture(compactCreatureBack, "backTex");
+						}
+						
 						compactCreatureShader.addTexture(faceTex, "faceTex");
 						compactCreatureShader
 								.setUniform(new Vector4f(target, 0, cCard.getPower(), cCard.getCurrentHits()), "stats");
